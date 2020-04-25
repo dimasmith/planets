@@ -1,7 +1,7 @@
 use crate::physics::gravity::{Gravity, Mass};
 use crate::physics::motion;
 use crate::render::{Renderable, Renderer};
-use graphics::{types, Transformed};
+use graphics::Transformed;
 use piston::input::RenderArgs;
 
 pub struct Planet {
@@ -29,10 +29,6 @@ impl Planet {
             mass: self.mass,
             position: self.motion.position,
         }
-    }
-
-    pub fn rect(&self) -> types::Rectangle {
-        graphics::rectangle::centered_square(self.motion.position[0], self.motion.position[1], 25.0)
     }
 }
 const PALE_BLUE: [f32; 4] = [0.2, 0.2, 0.9, 1.0];

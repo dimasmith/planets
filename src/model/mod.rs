@@ -1,5 +1,4 @@
 use crate::model::planet::Planet;
-use crate::render::Renderable;
 
 pub mod planet;
 

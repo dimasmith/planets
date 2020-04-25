@@ -19,7 +19,7 @@ impl Renderer {
     }
 
     pub fn render(&mut self, args: RenderArgs, world: &mut World) {
-        self.gl.draw(args.viewport(), |c, gl| {
+        self.gl.draw(args.viewport(), |_c, gl| {
             graphics::clear(BACK, gl);
         });
 

@@ -1,18 +1,16 @@
-use crate::physics::gravity::{Gravity, Mass};
+use crate::physics::gravity::Gravity;
 use crate::physics::motion;
 use crate::physics::motion::Position;
 use crate::render::renderable::Renderable;
-use crate::render::{Projector, Renderer};
+use crate::render::Projector;
 use graphics::math::Matrix2d;
-use graphics::{Context, Transformed};
+use graphics::Context;
 use opengl_graphics::GlGraphics;
-use piston::input::RenderArgs;
-use std::ops::Mul;
 
 pub struct Planet {
     pub name: String,
     pub motion: motion::Motion,
-    pub mass: Mass,
+    pub gravity: Gravity,
     trace: Vec<Position>,
 }
 
@@ -26,15 +24,8 @@ impl Planet {
         Planet {
             name,
             motion: movement,
-            mass: 1.0e8,
+            gravity: Gravity::new(1.0e8),
             trace: vec![],
-        }
-    }
-
-    pub fn gravity(&self) -> Gravity {
-        Gravity {
-            mass: self.mass,
-            position: self.motion.position,
         }
     }
 }
@@ -46,7 +37,7 @@ impl Renderable for Planet {
         &mut self,
         projector: &Projector,
         transform: [[f64; 3]; 2],
-        context: &mut Context,
+        _context: &mut Context,
         gl: &mut GlGraphics,
     ) {
         let position: Position = projector.project(&self.motion.position);
@@ -58,7 +49,7 @@ impl Renderable for Planet {
 
         let da = 1.0 / 25.0;
         let mut c = 0.0;
-        for (i, trace) in self.trace.iter().enumerate() {
+        for trace in self.trace.iter() {
             c += da;
             let alpha = da * c;
             let color = [0.2, 0.2, 0.9, alpha];
@@ -71,7 +62,7 @@ impl Renderable for Planet {
         &mut self,
         projector: &Projector,
         transform: Matrix2d,
-        context: &mut Context,
+        _context: &mut Context,
         gl: &mut GlGraphics,
     ) {
         let position: Position = projector.project(&self.motion.position);

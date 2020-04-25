@@ -6,10 +6,10 @@ use opengl_graphics::GlGraphics;
 pub trait Renderable {
     fn pre_render(
         &mut self,
-        projector: &Projector,
-        transform: Matrix2d,
-        context: &mut Context,
-        gl: &mut GlGraphics,
+        _projector: &Projector,
+        _transform: Matrix2d,
+        _context: &mut Context,
+        _gl: &mut GlGraphics,
     ) {
     }
 
@@ -35,10 +35,10 @@ pub trait Renderable {
 
     fn post_render(
         &mut self,
-        projector: &Projector,
-        transform: Matrix2d,
-        context: &mut Context,
-        gl: &mut GlGraphics,
+        _projector: &Projector,
+        _transform: Matrix2d,
+        _context: &mut Context,
+        _gl: &mut GlGraphics,
     ) {
     }
 }

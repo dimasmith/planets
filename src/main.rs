@@ -26,14 +26,14 @@ fn main() {
     // let mars = planet::Planet::new("Mars".to_string(), (0.0, 0.0));
     let mut deimos = planet::Planet::new("Deimos".to_string(), (1.0e6, 0.0));
     let mut phobos = planet::Planet::new("Phobos".to_string(), (-1.0e6, 0.0));
-    phobos.motion.velocity = [0.0, 0.0];
-    deimos.motion.velocity = [0.0, -0.4e5];
+    phobos.motion.velocity = [0.0, 0.15e5];
+    deimos.motion.velocity = [0.0, -0.15e5];
 
     let mut world = World {
         planets: vec![phobos, deimos],
     };
     let mut renderer = Renderer::new(GlGraphics::new(opengl));
-    let mut universe = Universe { acceleration: 5.0 };
+    let mut universe = Universe::new();
 
     let mut events = Events::new(EventSettings::new());
     while let Some(e) = events.next(&mut window) {

@@ -1,13 +1,12 @@
-use crate::model::World;
-use crate::physics::motion::Position;
-use crate::render::renderable::Renderable;
-use core::fmt::Alignment::Center;
-use graphics::math::Matrix2d;
 use graphics::{Context, Transformed};
 use opengl_graphics::GlGraphics;
 use piston::input::RenderArgs;
 use vecmath;
 use vecmath::Vector2;
+
+use crate::model::World;
+use crate::physics::motion::Position;
+use crate::render::renderable::Renderable;
 
 pub mod renderable;
 
@@ -93,7 +92,7 @@ impl Renderable for GeoCenter {
         &mut self,
         projector: &Projector,
         transform: [[f64; 3]; 2],
-        context: &mut Context,
+        _context: &mut Context,
         gl: &mut GlGraphics,
     ) {
         let position: Position = projector.project(&self.position);

@@ -1,7 +1,7 @@
 use crate::physics::gravity::Gravity;
 use crate::physics::motion;
 use crate::physics::motion::Position;
-use crate::render::circle::CircleComponent;
+use crate::render::circle::{CircleComponent, CircleTrace};
 use crate::render::renderable::Renderable;
 use crate::render::Projector;
 use graphics::Context;
@@ -14,7 +14,7 @@ pub struct Planet {
     pub motion: motion::Motion,
     pub gravity: Gravity,
     pub sprite: CircleComponent,
-    trace: Vec<Position>,
+    pub trace: CircleTrace,
 }
 
 impl Planet {
@@ -29,7 +29,7 @@ impl Planet {
             name,
             motion: movement,
             gravity: Gravity::new(1.0e8),
-            trace: vec![],
+            trace: CircleTrace::new(),
             sprite: CircleComponent::new(PALE_BLUE, [position.0, position.1], 25.0),
         }
     }

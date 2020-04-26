@@ -8,46 +8,51 @@ pub struct CircleComponent {
     pub circle: Ellipse,
     pub bound: Rectangle,
     radius: Radius,
-    trace: Option<Trace>,
 }
 
-struct CircleTrace {
+struct CircleTraceElement {
     pub circle: Ellipse,
     pub bound: Rectangle,
     radius: Radius,
 }
 
-struct Trace {
-    elements: Vec<CircleTrace>,
-    length: usize,
+pub struct CircleTrace {
+    elements: Vec<CircleTraceElement>,
+    samples: usize,
+    interval: usize,
     steps: usize,
 }
 
-impl Trace {
+impl CircleTrace {
     pub fn new() -> Self {
-        Trace {
+        CircleTrace {
             elements: vec![],
-            length: 16,
+            samples: 16,
+            interval: 16,
             steps: 0,
         }
     }
 
-    pub fn add(&mut self, mut element: CircleTrace) {
+    fn update(&mut self, sprite: &CircleComponent) {
         self.steps += 1;
-        if self.steps % 16 != 0 {
+        if self.steps % self.interval != 0 {
             return;
         }
         self.steps = 0;
 
-        self.elements.push(element);
-        let length = self.length;
-        if self.elements.len() > length {
-            self.elements.remove(0);
+        for ct in self.elements.iter_mut() {
+            ct.circle.color[3] -= 0.01;
         }
-        let da = 0.25 / length as f64;
-        for (i, e) in self.elements.iter_mut().enumerate() {
-            let alpha = da as f32 * i as f32;
-            e.circle.color[3] = alpha;
+
+        let mut ct = CircleTraceElement {
+            bound: sprite.bound,
+            circle: sprite.circle,
+            radius: sprite.radius,
+        };
+        ct.circle.color[3] = self.samples as f32 / 100.0;
+        self.elements.push(ct);
+        if self.elements.len() > self.samples {
+            self.elements.remove(0);
         }
     }
 }
@@ -60,18 +65,6 @@ impl CircleComponent {
             circle,
             bound,
             radius,
-            trace: Some(Trace::new()),
-        }
-    }
-
-    fn update_trace(&mut self) {
-        let ct = CircleTrace {
-            bound: self.bound,
-            circle: self.circle,
-            radius: self.radius,
-        };
-        if let Some(trace) = self.trace.as_mut() {
-            trace.add(ct);
         }
     }
 
@@ -91,15 +84,29 @@ impl CircleSystem {
     pub fn update(&self, world: &mut World, context: Context, gl: &mut GlGraphics) {
         let draw_state = &context.draw_state;
         for sprite in world.sprites().iter_mut() {
-            sprite.update_trace();
-            if let Some(trace) = sprite.trace.as_ref() {
-                for t in trace.elements.iter() {
-                    t.circle.draw(t.bound, draw_state, context.transform, gl);
-                }
-            }
             sprite
                 .circle
                 .draw(sprite.bound, draw_state, context.transform, gl);
+        }
+    }
+}
+
+pub struct CircleTraceSystem {}
+
+impl CircleTraceSystem {
+    pub fn new() -> Self {
+        CircleTraceSystem {}
+    }
+
+    pub fn update(&self, world: &mut World, context: Context, gl: &mut GlGraphics) {
+        let draw_state = &context.draw_state;
+        for (sprite, trace) in world.sprites_and_traces().iter_mut() {
+            trace.update(sprite);
+            for element in trace.elements.iter() {
+                element
+                    .circle
+                    .draw(element.bound, draw_state, context.transform, gl);
+            }
         }
     }
 }

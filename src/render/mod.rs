@@ -7,7 +7,7 @@ use vecmath::Vector2;
 use crate::model::World;
 use crate::physics::motion::Position;
 use crate::render::camera::{Camera, CameraSystem};
-use crate::render::circle::CircleSystem;
+use crate::render::circle::{CircleSystem, CircleTraceSystem};
 use crate::render::renderable::Renderable;
 
 pub mod camera;
@@ -19,6 +19,7 @@ pub struct Renderer {
     pub gl: GlGraphics,
     camera_system: CameraSystem,
     circle_system: CircleSystem,
+    circle_trace_system: CircleTraceSystem,
 }
 
 pub struct Projector {
@@ -40,6 +41,7 @@ impl Renderer {
             gl,
             camera_system: CameraSystem::new(Camera::new(2.5e-4)),
             circle_system: CircleSystem::new(),
+            circle_trace_system: CircleTraceSystem::new(),
         }
     }
 
@@ -57,6 +59,7 @@ impl Renderer {
         // clear the screen
         graphics::clear(BACK, gl);
 
+        self.circle_trace_system.update(world, context, gl);
         self.circle_system.update(world, context, gl);
 
         let mut center = GeoCenter::new(&world);

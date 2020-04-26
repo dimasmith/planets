@@ -1,6 +1,7 @@
 use crate::model::planet::Planet;
 use crate::physics::gravity::Gravity;
-use crate::physics::motion::Motion;
+use crate::physics::motion::{Motion, Position};
+use crate::render::circle::CircleComponent;
 
 pub mod planet;
 
@@ -18,5 +19,16 @@ impl World {
             .iter_mut()
             .map(|p| (&mut p.motion, &mut p.gravity))
             .collect()
+    }
+
+    pub fn sprites_and_positions(&mut self) -> Vec<(&mut CircleComponent, &mut Position)> {
+        self.planets
+            .iter_mut()
+            .map(|p| (&mut p.sprite, &mut p.motion.position))
+            .collect()
+    }
+
+    pub fn sprites(&self) -> Vec<&CircleComponent> {
+        self.planets.iter().map(|p| &p.sprite).collect()
     }
 }

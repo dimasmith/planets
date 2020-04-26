@@ -56,7 +56,7 @@ impl MotionSystem {
 
     fn advance(&self, motion: &mut Motion, dt: f64) {
         let da = vecmath::vec2_scale(motion.acceleration, dt);
-        motion.velocity = vecmath::vec2_add(da, motion.velocity);
+        motion.velocity = vecmath::vec2_add(motion.velocity, da);
         let dv = vecmath::vec2_scale(motion.velocity, dt);
         motion.position = vecmath::vec2_add(motion.position, dv);
     }

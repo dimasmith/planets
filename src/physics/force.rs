@@ -38,7 +38,7 @@ impl ForceSystem {
         for (id, (force_component, mass_component, motion)) in
             &mut world.query::<(&ForceComponent, &MassComponent, &mut Motion)>()
         {
-            let acceleration =
+            let mut acceleration =
                 vecmath::vec2_scale(force_component.force, 1.0 / mass_component.mass);
             motion.acceleration = acceleration;
         }

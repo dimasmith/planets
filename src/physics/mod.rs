@@ -20,7 +20,7 @@ pub struct Universe {
 impl Universe {
     pub fn new() -> Self {
         Universe {
-            acceleration: 1.0e3,
+            acceleration: 5.0e3,
             motion: MotionSystem::new(),
             gravity: GravitySystem::new(),
             force: ForceSystem::new(),
@@ -31,7 +31,7 @@ impl Universe {
     pub fn update(&mut self, args: UpdateArgs, world: &mut World) {
         let dt = args.dt * self.acceleration;
         self.force.reset(world);
-        self.gravity.update(world, dt);
+        self.gravity.update(world);
         self.propulsion.update(world);
         self.force.update(world);
         self.motion.update(world, dt);

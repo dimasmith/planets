@@ -1,10 +1,10 @@
-use crate::physics::force::ForceComponent;
+use crate::physics::force::{Force, ForceComponent};
 use crate::physics::motion::{distance_between, Acceleration, Motion, Position};
 use hecs::{Entity, World};
 use std::collections::HashMap;
 use vecmath;
 
-const G: f64 = 1.0;
+const G: f64 = 6.674e-11;
 pub type Mass = f64;
 
 pub struct MassComponent {
@@ -24,7 +24,7 @@ struct GravityCalculation {
 }
 
 impl GravityCalculation {
-    pub fn acceleration(&self, rhs: &GravityCalculation) -> Acceleration {
+    pub fn acceleration(&self, rhs: &GravityCalculation) -> Force {
         let distance = distance_between(&self.position, &rhs.position);
         if distance == 0.0 {
             return [0.0, 0.0];
@@ -33,11 +33,13 @@ impl GravityCalculation {
         let mass_product = self.mass * rhs.mass;
         let force = G * mass_product / distance_squared;
         let direction = vecmath::vec2_normalized(vecmath::vec2_sub(rhs.position, self.position));
-        vecmath::vec2_scale(direction, force)
+        let acceleration = vecmath::vec2_scale(direction, force);
+        let l = vecmath::vec2_len(acceleration);
+        acceleration
     }
 }
 
-fn accelerations(bodies: &Vec<GravityCalculation>, dt: f64) -> HashMap<Entity, Acceleration> {
+fn accelerations(bodies: &Vec<GravityCalculation>) -> HashMap<Entity, Acceleration> {
     let mut matrix = HashMap::new();
 
     for x in bodies.iter() {
@@ -45,7 +47,6 @@ fn accelerations(bodies: &Vec<GravityCalculation>, dt: f64) -> HashMap<Entity, A
         for y in bodies.iter() {
             acceleration = vecmath::vec2_add(acceleration, x.acceleration(y));
         }
-        acceleration = vecmath::vec2_scale(acceleration, dt);
         matrix.insert(x.entity, acceleration);
     }
 
@@ -58,7 +59,7 @@ impl GravitySystem {
         GravitySystem {}
     }
 
-    pub fn update(&mut self, world: &mut World, dt: f64) {
+    pub fn update(&mut self, world: &mut World) {
         let mut gravities: Vec<GravityCalculation> = vec![];
         for (id, (g, m)) in &mut world.query::<(&MassComponent, &Motion)>() {
             gravities.push(GravityCalculation {
@@ -67,7 +68,7 @@ impl GravitySystem {
                 entity: id,
             });
         }
-        let accels = accelerations(&gravities, dt);
+        let accels = accelerations(&gravities);
         for (id, (force_component)) in &mut world.query::<(&mut ForceComponent)>() {
             match accels.get(&id) {
                 Some(accel) => {

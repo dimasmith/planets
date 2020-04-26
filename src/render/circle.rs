@@ -58,9 +58,9 @@ impl CircleTrace {
 }
 
 impl CircleComponent {
-    pub fn new(color: Color, center: Position, radius: Radius) -> Self {
+    pub fn new(color: Color, radius: Radius) -> Self {
         let circle = Ellipse::new(color);
-        let bound = graphics::rectangle::centered_square(center[0], center[1], radius);
+        let bound = graphics::rectangle::centered_square(0.0, 0.0, radius);
         CircleComponent {
             circle,
             bound,

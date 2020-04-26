@@ -13,7 +13,6 @@ pub mod camera;
 pub mod circle;
 
 pub struct Renderer {
-    pub zoom: f64,
     pub gl: GlGraphics,
     camera_system: CameraSystem,
     circle_system: CircleSystem,
@@ -25,9 +24,8 @@ const BACK: [f32; 4] = [0.2, 0.2, 0.2, 1.0];
 impl Renderer {
     pub fn new(gl: GlGraphics) -> Renderer {
         Renderer {
-            zoom: 2.5e-4,
             gl,
-            camera_system: CameraSystem::new(Camera::new(2.5e-4)),
+            camera_system: CameraSystem::new(Camera::new(400.0 / 12.0 * 1.0e-6)),
             circle_system: CircleSystem::new(),
             circle_trace_system: CircleTraceSystem::new(),
         }

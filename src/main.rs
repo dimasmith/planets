@@ -25,24 +25,22 @@ fn main() {
         .unwrap();
 
     let mut world = hecs::World::new();
-    let phobos_position = [-3.5e6, 1.0e6];
+    let kerbin_position = [0.0, 0.0];
     world.spawn((
-        Motion::position(phobos_position),
-        MassComponent::new(1.0e8),
-        CircleComponent::new([0.2, 0.2, 0.9, 1.0], phobos_position, 25.0),
+        Motion::position(kerbin_position),
+        MassComponent::new(5.2915158e22),
+        CircleComponent::new([0.2, 0.2, 0.9, 1.0], 20.0),
         CircleTrace::new(),
         ForceComponent::zero(),
-        PropulsionComponent::zero(),
     ));
 
-    let deimos_position = [-3.5e6, -1.0e6];
+    let mun_position = [-12.0e6, 0.0];
     world.spawn((
-        Motion::position(deimos_position),
-        MassComponent::new(1.0e9),
-        CircleComponent::new([0.9, 0.2, 0.2, 1.0], deimos_position, 25.0),
+        Motion::new_position_velocity(mun_position, [0.0, 543.0]),
+        MassComponent::new(9.7599066e20),
+        CircleComponent::new([0.5, 0.5, 0.5, 1.0], 10.0),
         CircleTrace::new(),
         ForceComponent::zero(),
-        PropulsionComponent::zero(),
     ));
 
     let mut renderer = Renderer::new(GlGraphics::new(opengl));

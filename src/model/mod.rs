@@ -28,7 +28,7 @@ impl World {
             .collect()
     }
 
-    pub fn sprites(&self) -> Vec<&CircleComponent> {
-        self.planets.iter().map(|p| &p.sprite).collect()
+    pub fn sprites(&mut self) -> Vec<&mut CircleComponent> {
+        self.planets.iter_mut().map(|p| &mut p.sprite).collect()
     }
 }

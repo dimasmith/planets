@@ -8,6 +8,7 @@ use crate::model::World;
 use crate::physics::motion::Position;
 use crate::render::renderable::Renderable;
 
+pub mod circle;
 pub mod renderable;
 
 pub struct Renderer {
@@ -51,23 +52,25 @@ impl Renderer {
     }
 
     pub fn render(&mut self, args: RenderArgs, world: &mut World) {
-        let mut context = self.gl.draw_begin(args.viewport());
         let (x, y) = self.center_point(world, args);
-        let transform = context.trans(x, y).transform;
-
-        self.gl.draw(args.viewport(), |_, gl| {
-            graphics::clear(BACK, gl);
-        });
         let projector = self.projector();
+        let mut gl = &mut self.gl;
+
+        let mut context = gl.draw_begin(args.viewport());
+        // camera tracking
+        context = context.trans(x, y);
+
+        // clear the screen
+        graphics::clear(BACK, gl);
 
         for planet in world.planets.iter_mut() {
-            planet.render_all(&projector, transform, &mut context, &mut self.gl);
+            planet.render_all(&projector, &mut context, &mut gl);
         }
 
         let mut center = GeoCenter::new(&world);
-        center.render_all(&projector, transform, &mut context, &mut self.gl);
+        center.render_all(&projector, &mut context, &mut gl);
 
-        self.gl.draw_end();
+        gl.draw_end();
     }
 }
 
@@ -88,15 +91,9 @@ impl GeoCenter {
 }
 
 impl Renderable for GeoCenter {
-    fn render(
-        &mut self,
-        projector: &Projector,
-        transform: [[f64; 3]; 2],
-        _context: &mut Context,
-        gl: &mut GlGraphics,
-    ) {
+    fn render(&mut self, projector: &Projector, context: &mut Context, gl: &mut GlGraphics) {
         let position: Position = projector.project(&self.position);
         let bound = graphics::rectangle::centered_square(position[0], position[1], 10.0);
-        graphics::ellipse([1.0, 0.0, 0.0, 1.0], bound, transform, gl);
+        graphics::ellipse([1.0, 0.0, 0.0, 1.0], bound, context.transform, gl);
     }
 }

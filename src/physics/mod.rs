@@ -20,7 +20,7 @@ pub struct Universe {
 impl Universe {
     pub fn new() -> Self {
         Universe {
-            acceleration: 5.0e3,
+            acceleration: 25.0e3,
             motion: MotionSystem::new(),
             gravity: GravitySystem::new(),
             force: ForceSystem::new(),

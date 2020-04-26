@@ -25,10 +25,23 @@ impl Renderer {
     pub fn new(gl: GlGraphics) -> Renderer {
         Renderer {
             gl,
-            camera_system: CameraSystem::new(Camera::new(400.0 / 12.0 * 1.0e-6)),
+            camera_system: CameraSystem::new(Camera::new(400.0 / 47.0 * 1.0e-6)),
             circle_system: CircleSystem::new(),
             circle_trace_system: CircleTraceSystem::new(),
         }
+    }
+
+    pub fn camera(gl: GlGraphics, camera: Camera) -> Renderer {
+        Renderer {
+            gl,
+            camera_system: CameraSystem::new(camera),
+            circle_system: CircleSystem::new(),
+            circle_trace_system: CircleTraceSystem::new(),
+        }
+    }
+
+    pub fn camera_as_mut(&mut self) -> &mut Camera {
+        &mut self.camera_system.camera
     }
 
     pub fn render(&mut self, args: RenderArgs, world: &mut World) {
@@ -43,33 +56,6 @@ impl Renderer {
         self.circle_trace_system.update(world, context, gl);
         self.circle_system.update(world, context, gl);
 
-        // let mut center = GeoCenter::new(&world);
-        // center.render_all(&projector, &mut context, &mut gl);
-
         gl.draw_end();
     }
 }
-
-// struct GeoCenter {
-//     position: Position,
-// }
-//
-// impl GeoCenter {
-//     fn new(world: &World) -> GeoCenter {
-//         let mut position = world
-//             .planets
-//             .iter()
-//             .map(|p| p.motion.position)
-//             .fold([0.0, 0.0], |a, p| vecmath::vec2_add(a, p));
-//         position = vecmath::vec2_scale(position, 1.0 / world.planets.len() as f64);
-//         GeoCenter { position }
-//     }
-// }
-//
-// impl Renderable for GeoCenter {
-//     fn render(&mut self, projector: &Projector, context: &mut Context, gl: &mut GlGraphics) {
-//         let position: Position = projector.project(&self.position);
-//         let bound = graphics::rectangle::centered_square(position[0], position[1], 10.0);
-//         graphics::ellipse([1.0, 0.0, 0.0, 1.0], bound, context.transform, gl);
-//     }
-// }

@@ -1,5 +1,6 @@
-use crate::model::World;
-use crate::physics::motion::{distance_between, Acceleration, Position};
+use crate::physics::motion::{distance_between, Acceleration, Motion, Position};
+use hecs::{Entity, World};
+use std::collections::HashMap;
 use vecmath;
 
 const G: f64 = 1.0;
@@ -18,6 +19,7 @@ impl Gravity {
 struct GravityCalculation {
     pub mass: Mass,
     pub position: Position,
+    entity: Entity,
 }
 
 impl GravityCalculation {
@@ -34,8 +36,8 @@ impl GravityCalculation {
     }
 }
 
-fn accelerations(bodies: &Vec<GravityCalculation>, dt: f64) -> Vec<Acceleration> {
-    let mut matrix: Vec<Acceleration> = vec![];
+fn accelerations(bodies: &Vec<GravityCalculation>, dt: f64) -> HashMap<Entity, Acceleration> {
+    let mut matrix = HashMap::new();
 
     for x in bodies.iter() {
         let mut acceleration: Acceleration = [0.0, 0.0];
@@ -43,7 +45,7 @@ fn accelerations(bodies: &Vec<GravityCalculation>, dt: f64) -> Vec<Acceleration>
             acceleration = vecmath::vec2_add(acceleration, x.acceleration(y));
         }
         acceleration = vecmath::vec2_scale(acceleration, dt);
-        matrix.push(acceleration);
+        matrix.insert(x.entity, acceleration);
     }
 
     return matrix;
@@ -56,17 +58,22 @@ impl GravitySystem {
     }
 
     pub fn update(&mut self, world: &mut World, dt: f64) {
-        let gravities: Vec<GravityCalculation> = world
-            .gravity()
-            .iter()
-            .map(|g| GravityCalculation {
-                mass: g.1.mass,
-                position: g.0.position,
-            })
-            .collect();
+        let mut gravities: Vec<GravityCalculation> = vec![];
+        for (id, (g, m)) in &mut world.query::<(&Gravity, &Motion)>() {
+            gravities.push(GravityCalculation {
+                position: m.position,
+                mass: g.mass,
+                entity: id,
+            });
+        }
         let accels = accelerations(&gravities, dt);
-        for (i, motion) in world.motions().iter_mut().enumerate() {
-            motion.acceleration = accels[i];
+        for (id, (motion)) in &mut world.query::<(&mut Motion)>() {
+            match accels.get(&id) {
+                Some(accel) => {
+                    motion.acceleration = *accel;
+                }
+                None => {}
+            }
         }
     }
 }

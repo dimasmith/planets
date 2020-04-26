@@ -1,6 +1,6 @@
-use crate::model::World;
 use crate::physics::gravity::GravitySystem;
 use crate::physics::motion::MotionSystem;
+use hecs::World;
 use piston::input::UpdateArgs;
 
 pub mod gravity;

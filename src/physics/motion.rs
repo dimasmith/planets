@@ -1,15 +1,40 @@
-use crate::model::World;
+use hecs::World;
 use vecmath;
 
 pub type Position = vecmath::Vector2<f64>;
 pub type Velocity = vecmath::Vector2<f64>;
 pub type Acceleration = vecmath::Vector2<f64>;
 
-#[derive(Debug)]
 pub struct Motion {
     pub position: Position,
     pub velocity: Velocity,
     pub acceleration: Acceleration,
+}
+
+impl Motion {
+    pub fn new() -> Self {
+        Motion {
+            position: [0.0, 0.0],
+            velocity: [0.0, 0.0],
+            acceleration: [0.0, 0.0],
+        }
+    }
+
+    pub fn new_pos(position: Position) -> Self {
+        Motion {
+            position,
+            velocity: [0.0, 0.0],
+            acceleration: [0.0, 0.0],
+        }
+    }
+
+    pub fn new_position_velocity(position: Position, velocity: Velocity) -> Self {
+        Motion {
+            position,
+            velocity,
+            acceleration: [0.0, 0.0],
+        }
+    }
 }
 
 pub fn distance_between(lhs: &Position, rhs: &Position) -> f64 {
@@ -24,7 +49,7 @@ impl MotionSystem {
     }
 
     pub fn update(&mut self, world: &mut World, dt: f64) {
-        for motion in world.motions().iter_mut() {
+        for (id, (motion)) in &mut world.query::<(&mut Motion)>() {
             self.advance(motion, dt);
         }
     }

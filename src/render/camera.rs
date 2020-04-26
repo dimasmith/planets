@@ -1,6 +1,7 @@
-use crate::model::World;
-use crate::physics::motion::Position;
+use crate::physics::motion::{Motion, Position};
+use crate::render::circle::CircleComponent;
 use graphics::{Context, Transformed};
+use hecs::World;
 use piston::input::RenderArgs;
 
 #[derive(Copy, Clone, Debug)]
@@ -18,8 +19,8 @@ impl Camera {
     }
 
     /// Project physical position into the rendering position
-    pub fn project(&self, coords: &Position) -> Position {
-        vecmath::vec2_scale(*coords, self.zoom)
+    pub fn project(&self, coords: Position) -> Position {
+        vecmath::vec2_scale(coords, self.zoom)
     }
 
     /// Updates camera position
@@ -40,8 +41,8 @@ impl CameraSystem {
     }
 
     pub fn update(&mut self, context: Context, world: &mut World, args: RenderArgs) -> Context {
-        for (sprite, position) in world.sprites_and_positions().iter_mut() {
-            let projected_position = self.camera.project(position);
+        for (id, (sprite, motion)) in &mut world.query::<(&mut CircleComponent, &Motion)>() {
+            let projected_position = self.camera.project(motion.position);
             sprite.set_position(projected_position);
         }
         self.camera.change_focus(args);

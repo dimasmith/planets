@@ -1,7 +1,7 @@
-use crate::model::World;
 use crate::physics::motion::Position;
 use graphics::types::{Color, Radius, Rectangle};
 use graphics::{Context, Ellipse};
+use hecs::World;
 use opengl_graphics::GlGraphics;
 
 pub struct CircleComponent {
@@ -83,7 +83,7 @@ impl CircleSystem {
 
     pub fn update(&self, world: &mut World, context: Context, gl: &mut GlGraphics) {
         let draw_state = &context.draw_state;
-        for sprite in world.sprites().iter_mut() {
+        for (id, (sprite)) in &mut world.query::<(&mut CircleComponent)>() {
             sprite
                 .circle
                 .draw(sprite.bound, draw_state, context.transform, gl);
@@ -100,8 +100,8 @@ impl CircleTraceSystem {
 
     pub fn update(&self, world: &mut World, context: Context, gl: &mut GlGraphics) {
         let draw_state = &context.draw_state;
-        for (sprite, trace) in world.sprites_and_traces().iter_mut() {
-            trace.update(sprite);
+        for (id, (sprite, trace)) in &mut world.query::<(&CircleComponent, &mut CircleTrace)>() {
+            trace.update(&sprite);
             for element in trace.elements.iter() {
                 element
                     .circle

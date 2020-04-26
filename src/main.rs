@@ -4,8 +4,10 @@ use piston::event_loop::{EventSettings, Events};
 use piston::input::{RenderEvent, UpdateEvent};
 use piston::window::WindowSettings;
 
-use crate::physics::gravity::Gravity;
+use crate::physics::force::ForceComponent;
+use crate::physics::gravity::MassComponent;
 use crate::physics::motion::Motion;
+use crate::physics::propulsion::PropulsionComponent;
 use crate::physics::Universe;
 use crate::render::circle::{CircleComponent, CircleTrace};
 use crate::render::Renderer;
@@ -23,22 +25,24 @@ fn main() {
         .unwrap();
 
     let mut world = hecs::World::new();
-    let phobos_position = [1.0e6, 0.0];
-    let phobos_velocity = [0.0, 0.25e5];
+    let phobos_position = [-3.5e6, 1.0e6];
     world.spawn((
-        Motion::new_position_velocity(phobos_position, phobos_velocity),
-        Gravity::new(1.0e8),
+        Motion::position(phobos_position),
+        MassComponent::new(1.0e8),
         CircleComponent::new([0.2, 0.2, 0.9, 1.0], phobos_position, 25.0),
         CircleTrace::new(),
+        ForceComponent::zero(),
+        PropulsionComponent::zero(),
     ));
 
-    let deimos_position = [0.0, 0.0];
-    let deimos_velocity = [0.0, 0.0];
+    let deimos_position = [-3.5e6, -1.0e6];
     world.spawn((
-        Motion::new_position_velocity(deimos_position, deimos_velocity),
-        Gravity::new(1.0e9),
+        Motion::position(deimos_position),
+        MassComponent::new(1.0e9),
         CircleComponent::new([0.9, 0.2, 0.2, 1.0], deimos_position, 25.0),
         CircleTrace::new(),
+        ForceComponent::zero(),
+        PropulsionComponent::zero(),
     ));
 
     let mut renderer = Renderer::new(GlGraphics::new(opengl));

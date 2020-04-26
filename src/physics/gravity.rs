@@ -1,3 +1,4 @@
+use crate::physics::force::ForceComponent;
 use crate::physics::motion::{distance_between, Acceleration, Motion, Position};
 use hecs::{Entity, World};
 use std::collections::HashMap;
@@ -6,13 +7,13 @@ use vecmath;
 const G: f64 = 1.0;
 pub type Mass = f64;
 
-pub struct Gravity {
-    mass: Mass,
+pub struct MassComponent {
+    pub mass: Mass,
 }
 
-impl Gravity {
+impl MassComponent {
     pub fn new(mass: Mass) -> Self {
-        Gravity { mass }
+        MassComponent { mass }
     }
 }
 
@@ -59,7 +60,7 @@ impl GravitySystem {
 
     pub fn update(&mut self, world: &mut World, dt: f64) {
         let mut gravities: Vec<GravityCalculation> = vec![];
-        for (id, (g, m)) in &mut world.query::<(&Gravity, &Motion)>() {
+        for (id, (g, m)) in &mut world.query::<(&MassComponent, &Motion)>() {
             gravities.push(GravityCalculation {
                 position: m.position,
                 mass: g.mass,
@@ -67,10 +68,10 @@ impl GravitySystem {
             });
         }
         let accels = accelerations(&gravities, dt);
-        for (id, (motion)) in &mut world.query::<(&mut Motion)>() {
+        for (id, (force_component)) in &mut world.query::<(&mut ForceComponent)>() {
             match accels.get(&id) {
                 Some(accel) => {
-                    motion.acceleration = *accel;
+                    force_component.force = *accel;
                 }
                 None => {}
             }

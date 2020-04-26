@@ -12,15 +12,15 @@ pub struct Motion {
 }
 
 impl Motion {
-    pub fn new() -> Self {
+    pub fn new(position: Position, velocity: Velocity, acceleration: Acceleration) -> Self {
         Motion {
-            position: [0.0, 0.0],
-            velocity: [0.0, 0.0],
-            acceleration: [0.0, 0.0],
+            position,
+            velocity,
+            acceleration,
         }
     }
 
-    pub fn new_pos(position: Position) -> Self {
+    pub fn position(position: Position) -> Self {
         Motion {
             position,
             velocity: [0.0, 0.0],

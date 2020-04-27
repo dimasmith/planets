@@ -1,8 +1,10 @@
-use crate::physics::motion::Position;
+use graphics::character::CharacterCache;
 use graphics::types::{Color, Radius, Rectangle};
 use graphics::{Context, Ellipse};
 use hecs::World;
-use opengl_graphics::GlGraphics;
+use opengl_graphics::{GlGraphics, GlyphCache};
+
+use crate::physics::motion::Position;
 
 pub struct CircleComponent {
     pub circle: Ellipse,

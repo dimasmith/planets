@@ -12,6 +12,7 @@ piston2d-graphics = "0.36.0"
 pistoncore-glutin_window = "0.63.0"
 piston2d-opengl_graphics = "0.72.0"
 hecs = "0.2.12"
+rusttype = "0.9.1"
 
 [dependencies.vecmath]
 version = "1.0.0"

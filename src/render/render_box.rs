@@ -5,6 +5,7 @@ use vecmath::Vector2;
 
 pub type RenderingPosition = Vector2<f64>;
 /// body rendering position and bounds
+#[derive(Copy, Clone)]
 pub struct RenderBoxComponent {
     position: RenderingPosition,
     radius: f64,

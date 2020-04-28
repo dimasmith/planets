@@ -7,21 +7,24 @@ use vecmath::Vector2;
 
 use crate::physics::motion::Position;
 use crate::render::camera::{Camera, CameraSystem};
-use crate::render::circle::{CircleSystem, CircleTraceSystem};
+use crate::render::circle::CircleSystem;
 use crate::render::name::NameSystem;
+use crate::render::trace::{RenderTraceSystem, TraceSpawnSystem};
 use graphics::character::CharacterCache;
 
 pub mod camera;
 pub mod circle;
 pub mod name;
 pub mod render_box;
+pub mod trace;
 
 pub struct Renderer<'r> {
     pub gl: GlGraphics,
     camera_system: CameraSystem,
     circle_system: CircleSystem,
-    circle_trace_system: CircleTraceSystem,
     name_system: NameSystem,
+    trace_system: RenderTraceSystem,
+    trace_spawn_system: TraceSpawnSystem,
     glyphs: GlyphCache<'r>,
 }
 
@@ -33,8 +36,9 @@ impl Renderer<'_> {
             gl,
             camera_system: CameraSystem::new(camera),
             circle_system: CircleSystem::new(),
-            circle_trace_system: CircleTraceSystem::new(),
             name_system: NameSystem::new(),
+            trace_system: RenderTraceSystem::new(),
+            trace_spawn_system: TraceSpawnSystem::new(),
             glyphs: Renderer::character_cache(),
         }
     }
@@ -59,7 +63,8 @@ impl Renderer<'_> {
         // clear the screen
         graphics::clear(BACK, gl);
 
-        self.circle_trace_system.update(world, context, gl);
+        self.trace_spawn_system.update(world);
+        self.trace_system.update(world, context, gl);
         self.circle_system.update(world, context, gl);
         self.name_system.update(world, glyphs, context, gl);
 

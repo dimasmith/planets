@@ -18,7 +18,8 @@ pub struct Camera {
 }
 
 impl Camera {
-    pub fn new(zoom: f64) -> Self {
+    #[allow(dead_code)]
+    pub fn fixed(zoom: f64) -> Self {
         Camera {
             zoom,
             focus: [0.0, 0.0],

@@ -26,7 +26,7 @@ impl PropulsionSystem {
         for (id, (propulsion_component, force_component)) in
             &mut world.query::<(&PropulsionComponent, &mut ForceComponent)>()
         {
-            let mut force = vecmath::vec2_add(force_component.force, propulsion_component.force);
+            let force = vecmath::vec2_add(force_component.force, propulsion_component.force);
             force_component.force = force;
         }
     }

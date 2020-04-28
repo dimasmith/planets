@@ -9,9 +9,10 @@ use crate::physics::gravity::MassComponent;
 use crate::physics::motion::Motion;
 use crate::physics::Universe;
 use crate::render::camera::Camera;
-use crate::render::circle::{CircleComponent, CircleTrace};
+use crate::render::circle::CircleComponent;
 use crate::render::name::NameComponent;
 use crate::render::render_box::RenderBoxComponent;
+use crate::render::trace::SpawnTraceSystem;
 use crate::render::Renderer;
 use rusttype::Font;
 
@@ -34,7 +35,6 @@ fn main() {
         NameComponent::new("Kerbin"),
         MassComponent::new(5.2915158e22),
         CircleComponent::new([0.2, 0.2, 0.9, 1.0]),
-        CircleTrace::new(),
         ForceComponent::zero(),
         RenderBoxComponent::new(),
     ));
@@ -45,9 +45,9 @@ fn main() {
         NameComponent::new("Mun"),
         MassComponent::new(9.7599066e20),
         CircleComponent::new([0.5, 0.5, 0.5, 1.0]),
-        CircleTrace::new(),
         ForceComponent::zero(),
         RenderBoxComponent::centered_square(10.0),
+        SpawnTraceSystem::new(),
     ));
 
     let minmus_position = [47.0e6, 0.0];
@@ -56,9 +56,9 @@ fn main() {
         NameComponent::new("Minmus"),
         MassComponent::new(2.645758e19),
         CircleComponent::new([0.5, 1.0, 0.5, 1.0]),
-        CircleTrace::new(),
         ForceComponent::zero(),
         RenderBoxComponent::centered_square(8.0),
+        SpawnTraceSystem::new(),
     ));
 
     world.spawn((
@@ -66,9 +66,9 @@ fn main() {
         Motion::new_position_velocity([-47e6, 0.0], [0.0, 247.0 * 0.75]),
         MassComponent::new(2.645758e19),
         CircleComponent::new([1.0, 0.2, 0.2, 1.0]),
-        CircleTrace::new(),
         ForceComponent::zero(),
         RenderBoxComponent::centered_square(8.0),
+        SpawnTraceSystem::new(),
     ));
 
     world.spawn((
@@ -76,9 +76,9 @@ fn main() {
         Motion::new_position_velocity([0.0, -47e6], [-247.0 * 0.75, 0.0]),
         MassComponent::new(2.645758e19),
         CircleComponent::new([1.0, 1.0, 0.2, 1.0]),
-        CircleTrace::new(),
         ForceComponent::zero(),
         RenderBoxComponent::centered_square(8.0),
+        SpawnTraceSystem::new(),
     ));
 
     let mut camera = Camera::tracking(400.0 / 47.0 * 1.0e-6, kerbin);
@@ -96,11 +96,11 @@ fn main() {
         }
         if let Some(args) = e.mouse_scroll_args() {
             if args[1] < 0.0 {
-                let mut camera = renderer.camera_as_mut();
+                let camera = renderer.camera_as_mut();
                 camera.zoom_out();
             }
             if args[1] > 0.0 {
-                let mut camera = renderer.camera_as_mut();
+                let camera = renderer.camera_as_mut();
                 camera.zoom_in();
             }
         }

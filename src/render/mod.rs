@@ -27,17 +27,6 @@ pub struct Renderer<'r> {
 const BACK: [f32; 4] = [0.2, 0.2, 0.2, 1.0];
 
 impl Renderer<'_> {
-    pub fn new(gl: GlGraphics) -> Renderer<'static> {
-        Renderer {
-            gl,
-            camera_system: CameraSystem::new(Camera::new(400.0 / 47.0 * 1.0e-6)),
-            circle_system: CircleSystem::new(),
-            circle_trace_system: CircleTraceSystem::new(),
-            name_system: NameSystem::new(),
-            glyphs: Renderer::character_cache(),
-        }
-    }
-
     pub fn camera(gl: GlGraphics, camera: Camera) -> Renderer<'static> {
         Renderer {
             gl,
@@ -61,7 +50,7 @@ impl Renderer<'_> {
 
     pub fn render(&mut self, args: RenderArgs, world: &mut World) {
         let mut gl = &mut self.gl;
-        let mut glyphs = &mut self.glyphs;
+        let glyphs = &mut self.glyphs;
 
         let mut context = gl.draw_begin(args.viewport());
         context = self.camera_system.update(context, world, args);

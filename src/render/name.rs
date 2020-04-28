@@ -42,7 +42,8 @@ impl NameSystem {
                 glyphs,
                 context.trans_pos(position).transform,
                 gl,
-            );
+            )
+            .expect("can't render the name")
         }
     }
 }

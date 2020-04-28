@@ -2,7 +2,7 @@ use graphics::character::CharacterCache;
 use graphics::types::{Color, Radius, Rectangle};
 use graphics::{Context, Ellipse};
 use hecs::World;
-use opengl_graphics::{GlGraphics, GlyphCache};
+use opengl_graphics::GlGraphics;
 
 use crate::physics::motion::Position;
 
@@ -15,9 +15,14 @@ pub struct CircleComponent {
 struct CircleTraceElement {
     pub circle: Ellipse,
     pub bound: Rectangle,
-    radius: Radius,
 }
 
+/// component that enables circle traces
+///
+/// # Example
+/// ```
+/// CircleTrace::new()
+/// ```
 pub struct CircleTrace {
     elements: Vec<CircleTraceElement>,
     samples: usize,
@@ -49,7 +54,6 @@ impl CircleTrace {
         let mut ct = CircleTraceElement {
             bound: sprite.bound,
             circle: sprite.circle,
-            radius: sprite.radius,
         };
         ct.circle.color[3] = self.samples as f32 / 100.0;
         self.elements.push(ct);

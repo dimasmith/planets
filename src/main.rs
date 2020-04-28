@@ -7,7 +7,6 @@ use piston::window::WindowSettings;
 use crate::physics::force::ForceComponent;
 use crate::physics::gravity::MassComponent;
 use crate::physics::motion::Motion;
-use crate::physics::propulsion::PropulsionComponent;
 use crate::physics::Universe;
 use crate::render::camera::Camera;
 use crate::render::circle::{CircleComponent, CircleTrace};

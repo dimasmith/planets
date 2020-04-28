@@ -33,7 +33,6 @@ impl Camera {
         }
     }
 
-    /// Project physical position into the rendering position
     pub fn project(&self, coords: Position) -> Position {
         vecmath::vec2_scale(coords, self.zoom)
     }
@@ -44,13 +43,6 @@ impl Camera {
 
     pub fn zoom_out(&mut self) {
         self.zoom = self.zoom * 0.5;
-    }
-
-    /// Updates camera position
-    pub fn change_focus(&mut self, args: RenderArgs) {
-        let x = args.window_size[0] / 2.0;
-        let y = args.window_size[1] / 2.0;
-        self.focus = [x, y];
     }
 }
 

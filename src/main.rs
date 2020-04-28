@@ -31,9 +31,9 @@ fn main() {
     let kerbin_position = [0.0, 0.0];
     let kerbin = world.spawn((
         Motion::position(kerbin_position),
-        NameComponent::new("Kerbin".to_string()),
+        NameComponent::new("Kerbin"),
         MassComponent::new(5.2915158e22),
-        CircleComponent::new([0.2, 0.2, 0.9, 1.0], 20.0),
+        CircleComponent::new([0.2, 0.2, 0.9, 1.0]),
         CircleTrace::new(),
         ForceComponent::zero(),
         RenderBoxComponent::new(),
@@ -42,43 +42,43 @@ fn main() {
     let mun_position = [-12.0e6, 0.0];
     let mun = world.spawn((
         Motion::new_position_velocity(mun_position, [0.0, 543.0]),
-        NameComponent::new("Mun".to_string()),
+        NameComponent::new("Mun"),
         MassComponent::new(9.7599066e20),
-        CircleComponent::new([0.5, 0.5, 0.5, 1.0], 10.0),
+        CircleComponent::new([0.5, 0.5, 0.5, 1.0]),
         CircleTrace::new(),
         ForceComponent::zero(),
-        RenderBoxComponent::new(),
+        RenderBoxComponent::centered_square(10.0),
     ));
 
     let minmus_position = [47.0e6, 0.0];
     world.spawn((
         Motion::new_position_velocity(minmus_position, [0.0, -274.0]),
-        NameComponent::new("Minmus".to_string()),
+        NameComponent::new("Minmus"),
         MassComponent::new(2.645758e19),
-        CircleComponent::new([0.5, 1.0, 0.5, 1.0], 8.0),
+        CircleComponent::new([0.5, 1.0, 0.5, 1.0]),
         CircleTrace::new(),
         ForceComponent::zero(),
-        RenderBoxComponent::new(),
+        RenderBoxComponent::centered_square(8.0),
     ));
 
     world.spawn((
-        NameComponent::new("Phobos".to_string()),
+        NameComponent::new("Phobos"),
         Motion::new_position_velocity([-47e6, 0.0], [0.0, 247.0 * 0.75]),
         MassComponent::new(2.645758e19),
-        CircleComponent::new([1.0, 0.2, 0.2, 1.0], 8.0),
+        CircleComponent::new([1.0, 0.2, 0.2, 1.0]),
         CircleTrace::new(),
         ForceComponent::zero(),
-        RenderBoxComponent::new(),
+        RenderBoxComponent::centered_square(8.0),
     ));
 
     world.spawn((
-        NameComponent::new("Deimos".to_string()),
+        NameComponent::new("Deimos"),
         Motion::new_position_velocity([0.0, -47e6], [-247.0 * 0.75, 0.0]),
         MassComponent::new(2.645758e19),
-        CircleComponent::new([1.0, 1.0, 0.2, 1.0], 8.0),
+        CircleComponent::new([1.0, 1.0, 0.2, 1.0]),
         CircleTrace::new(),
         ForceComponent::zero(),
-        RenderBoxComponent::new(),
+        RenderBoxComponent::centered_square(8.0),
     ));
 
     let mut camera = Camera::tracking(400.0 / 47.0 * 1.0e-6, kerbin);

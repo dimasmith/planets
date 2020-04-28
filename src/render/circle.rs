@@ -9,8 +9,6 @@ use crate::render::render_box::RenderBoxComponent;
 
 pub struct CircleComponent {
     pub circle: Ellipse,
-    pub bound: Rectangle,
-    radius: Radius,
 }
 
 struct CircleTraceElement {
@@ -41,7 +39,7 @@ impl CircleTrace {
         }
     }
 
-    fn update(&mut self, sprite: &CircleComponent) {
+    fn update(&mut self, sprite: &CircleComponent, render_box: &RenderBoxComponent) {
         self.steps += 1;
         if self.steps % self.interval != 0 {
             return;
@@ -53,7 +51,7 @@ impl CircleTrace {
         }
 
         let mut ct = CircleTraceElement {
-            bound: sprite.bound,
+            bound: render_box.bound(),
             circle: sprite.circle,
         };
         ct.circle.color[3] = self.samples as f32 / 100.0;
@@ -65,19 +63,9 @@ impl CircleTrace {
 }
 
 impl CircleComponent {
-    pub fn new(color: Color, radius: Radius) -> Self {
+    pub fn new(color: Color) -> Self {
         let circle = Ellipse::new(color);
-        let bound = graphics::rectangle::centered_square(0.0, 0.0, radius);
-        CircleComponent {
-            circle,
-            bound,
-            radius,
-        }
-    }
-
-    pub fn set_position(&mut self, position: Position) {
-        let radius = self.radius;
-        self.bound = graphics::rectangle::centered_square(position[0], position[1], radius);
+        CircleComponent { circle }
     }
 }
 
@@ -90,13 +78,12 @@ impl CircleSystem {
 
     pub fn update(&self, world: &mut World, context: Context, gl: &mut GlGraphics) {
         let draw_state = &context.draw_state;
-        for (id, (sprite, rendering_position)) in
+        for (id, (sprite, render_box)) in
             &mut world.query::<(&mut CircleComponent, &RenderBoxComponent)>()
         {
-            sprite.set_position(rendering_position.position());
             sprite
                 .circle
-                .draw(sprite.bound, draw_state, context.transform, gl);
+                .draw(render_box.bound(), draw_state, context.transform, gl);
         }
     }
 }
@@ -110,8 +97,10 @@ impl CircleTraceSystem {
 
     pub fn update(&self, world: &mut World, context: Context, gl: &mut GlGraphics) {
         let draw_state = &context.draw_state;
-        for (id, (sprite, trace)) in &mut world.query::<(&CircleComponent, &mut CircleTrace)>() {
-            trace.update(&sprite);
+        for (id, (trace, sprite, render_box)) in
+            &mut world.query::<(&mut CircleTrace, &CircleComponent, &RenderBoxComponent)>()
+        {
+            trace.update(&sprite, &render_box);
             for element in trace.elements.iter() {
                 element
                     .circle

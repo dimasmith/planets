@@ -58,11 +58,9 @@ impl CameraSystem {
 
     pub fn update(&mut self, context: Context, world: &mut World, args: RenderArgs) -> Context {
         let mut projected_positions_by_entity: HashMap<Entity, Position> = HashMap::new();
-        for (id, (motion, rendering_position)) in
-            &mut world.query::<(&Motion, &mut RenderBoxComponent)>()
-        {
+        for (id, (motion, render_box)) in &mut world.query::<(&Motion, &mut RenderBoxComponent)>() {
             let projected_position = self.camera.project(motion.position);
-            rendering_position.move_to(projected_position);
+            render_box.move_to(projected_position);
             projected_positions_by_entity.insert(id, projected_position);
         }
 

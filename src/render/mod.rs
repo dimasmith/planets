@@ -14,6 +14,7 @@ use graphics::character::CharacterCache;
 pub mod camera;
 pub mod circle;
 pub mod name;
+pub mod render_box;
 
 pub struct Renderer<'r> {
     pub gl: GlGraphics,

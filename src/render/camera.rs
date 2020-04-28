@@ -1,5 +1,6 @@
 use crate::physics::motion::{Motion, Position};
 use crate::render::circle::CircleComponent;
+use crate::render::render_box::RenderBoxComponent;
 use graphics::{Context, Transformed};
 use hecs::{Entity, World};
 use piston::input::RenderArgs;
@@ -56,10 +57,12 @@ impl CameraSystem {
     }
 
     pub fn update(&mut self, context: Context, world: &mut World, args: RenderArgs) -> Context {
-        let mut projected_positions_by_entity = HashMap::new();
-        for (id, (sprite, motion)) in &mut world.query::<(&mut CircleComponent, &Motion)>() {
+        let mut projected_positions_by_entity: HashMap<Entity, Position> = HashMap::new();
+        for (id, (motion, rendering_position)) in
+            &mut world.query::<(&Motion, &mut RenderBoxComponent)>()
+        {
             let projected_position = self.camera.project(motion.position);
-            sprite.set_position(projected_position);
+            rendering_position.move_to(projected_position);
             projected_positions_by_entity.insert(id, projected_position);
         }
 
@@ -69,7 +72,7 @@ impl CameraSystem {
                 self.camera.focus = screen_center;
             }
             CameraTracking::Tracking(e) => {
-                let entity_position = *projected_positions_by_entity.get(&e).expect("error");
+                let entity_position = projected_positions_by_entity[&e];
                 let focus = vecmath::vec2_sub(screen_center, entity_position);
                 self.camera.focus = focus;
             }

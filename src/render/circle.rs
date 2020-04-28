@@ -5,6 +5,7 @@ use hecs::World;
 use opengl_graphics::GlGraphics;
 
 use crate::physics::motion::Position;
+use crate::render::render_box::RenderBoxComponent;
 
 pub struct CircleComponent {
     pub circle: Ellipse,
@@ -89,7 +90,10 @@ impl CircleSystem {
 
     pub fn update(&self, world: &mut World, context: Context, gl: &mut GlGraphics) {
         let draw_state = &context.draw_state;
-        for (id, (sprite)) in &mut world.query::<(&mut CircleComponent)>() {
+        for (id, (sprite, rendering_position)) in
+            &mut world.query::<(&mut CircleComponent, &RenderBoxComponent)>()
+        {
+            sprite.set_position(rendering_position.position());
             sprite
                 .circle
                 .draw(sprite.bound, draw_state, context.transform, gl);

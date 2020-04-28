@@ -11,6 +11,7 @@ use crate::physics::Universe;
 use crate::render::camera::Camera;
 use crate::render::circle::{CircleComponent, CircleTrace};
 use crate::render::name::NameComponent;
+use crate::render::render_box::RenderBoxComponent;
 use crate::render::Renderer;
 use rusttype::Font;
 
@@ -35,6 +36,7 @@ fn main() {
         CircleComponent::new([0.2, 0.2, 0.9, 1.0], 20.0),
         CircleTrace::new(),
         ForceComponent::zero(),
+        RenderBoxComponent::new(),
     ));
 
     let mun_position = [-12.0e6, 0.0];
@@ -45,6 +47,7 @@ fn main() {
         CircleComponent::new([0.5, 0.5, 0.5, 1.0], 10.0),
         CircleTrace::new(),
         ForceComponent::zero(),
+        RenderBoxComponent::new(),
     ));
 
     let minmus_position = [47.0e6, 0.0];
@@ -55,6 +58,7 @@ fn main() {
         CircleComponent::new([0.5, 1.0, 0.5, 1.0], 8.0),
         CircleTrace::new(),
         ForceComponent::zero(),
+        RenderBoxComponent::new(),
     ));
 
     world.spawn((
@@ -64,6 +68,7 @@ fn main() {
         CircleComponent::new([1.0, 0.2, 0.2, 1.0], 8.0),
         CircleTrace::new(),
         ForceComponent::zero(),
+        RenderBoxComponent::new(),
     ));
 
     world.spawn((
@@ -73,6 +78,7 @@ fn main() {
         CircleComponent::new([1.0, 1.0, 0.2, 1.0], 8.0),
         CircleTrace::new(),
         ForceComponent::zero(),
+        RenderBoxComponent::new(),
     ));
 
     let mut camera = Camera::tracking(400.0 / 47.0 * 1.0e-6, kerbin);

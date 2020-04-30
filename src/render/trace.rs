@@ -1,3 +1,4 @@
+use crate::physics::motion::Motion;
 use crate::render::circle::CircleComponent;
 use crate::render::render_box::RenderBoxComponent;
 use graphics::types::Color;
@@ -100,17 +101,23 @@ impl TraceSpawnSystem {
     pub fn update(&mut self, world: &mut World) {
         self.ticks_since_spawn -= 1;
         if self.ticks_since_spawn <= 0 {
-            let mut traces: Vec<(RenderBoxComponent, Color)> = vec![];
-            for (_id, (render_box, sprite, _trace_spawn)) in
-                &mut world.query::<(&RenderBoxComponent, &CircleComponent, &SpawnTraceSystem)>()
-            {
+            let mut traces: Vec<(RenderBoxComponent, Color, Motion)> = vec![];
+            for (_id, (render_box, sprite, motion, _trace_spawn)) in &mut world.query::<(
+                &RenderBoxComponent,
+                &CircleComponent,
+                &Motion,
+                &SpawnTraceSystem,
+            )>() {
                 let trace_box = render_box.clone();
                 let color = sprite.circle.color;
-                traces.push((trace_box, color));
+                traces.push((trace_box, color, motion.clone()));
             }
 
-            for (render_box, color) in traces.iter() {
-                world.spawn((TraceComponent::new(*color), *render_box));
+            for (render_box, color, motion) in traces.iter() {
+                let mut m = motion.clone();
+                m.velocity = [0.0, 0.0];
+                m.acceleration = [0.0, 0.0];
+                world.spawn((TraceComponent::new(*color), *render_box, m));
             }
 
             self.ticks_since_spawn = SPAWN_INTERVAL;

@@ -5,6 +5,7 @@ pub type Position = vecmath::Vector2<f64>;
 pub type Velocity = vecmath::Vector2<f64>;
 pub type Acceleration = vecmath::Vector2<f64>;
 
+#[derive(Copy, Clone)]
 pub struct Motion {
     pub position: Position,
     pub velocity: Velocity,

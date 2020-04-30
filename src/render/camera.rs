@@ -5,32 +5,24 @@ use hecs::{Entity, World};
 use piston::input::RenderArgs;
 use std::collections::HashMap;
 
-pub enum CameraTracking {
-    Fixed,
+pub enum TrackingMode {
     Tracking(Entity),
 }
 
 pub struct Camera {
     pub zoom: f64,
+    zoom_step: f64,
     pub focus: Position,
-    pub tracking: CameraTracking,
+    pub tracking: TrackingMode,
 }
 
 impl Camera {
-    #[allow(dead_code)]
-    pub fn fixed(zoom: f64) -> Self {
-        Camera {
-            zoom,
-            focus: [0.0, 0.0],
-            tracking: CameraTracking::Fixed,
-        }
-    }
-
     pub fn tracking(zoom: f64, entity: Entity) -> Self {
         Camera {
             zoom,
+            zoom_step: zoom / 16.0,
             focus: [0.0, 0.0],
-            tracking: CameraTracking::Tracking(entity),
+            tracking: TrackingMode::Tracking(entity),
         }
     }
 
@@ -39,11 +31,11 @@ impl Camera {
     }
 
     pub fn zoom_in(&mut self) {
-        self.zoom = self.zoom * 2.0;
+        self.zoom += self.zoom_step;
     }
 
     pub fn zoom_out(&mut self) {
-        self.zoom = self.zoom * 0.5;
+        self.zoom -= self.zoom_step;
     }
 }
 
@@ -66,10 +58,7 @@ impl CameraSystem {
 
         let screen_center = vecmath::vec2_scale(args.window_size, 0.5);
         match self.camera.tracking {
-            CameraTracking::Fixed => {
-                self.camera.focus = screen_center;
-            }
-            CameraTracking::Tracking(e) => {
+            TrackingMode::Tracking(e) => {
                 let entity_position = projected_positions_by_entity[&e];
                 let focus = vecmath::vec2_sub(screen_center, entity_position);
                 self.camera.focus = focus;

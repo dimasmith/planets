@@ -16,3 +16,6 @@ rusttype = "0.9.1"
 
 [dependencies.vecmath]
 version = "1.0.0"
+
+[dependencies.interpolation]
+version = "0.2.0"

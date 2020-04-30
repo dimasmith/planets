@@ -849,6 +849,19 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "05da548ad6865900e60eaba7f589cc0783590a92e940c26953ff81ddbab2d677"
 
 [[package]]
+name = "planetz"
+version = "0.1.0"
+dependencies = [
+ "hecs",
+ "piston",
+ "piston2d-graphics",
+ "piston2d-opengl_graphics",
+ "pistoncore-glutin_window",
+ "rusttype 0.9.1",
+ "vecmath",
+]
+
+[[package]]
 name = "png"
 version = "0.16.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -940,19 +953,6 @@ name = "redox_syscall"
 version = "0.1.56"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2439c63f3f6139d1b57529d16bc3b8bb855230c8efcc5d3a896c8bea7c3b1e84"
-
-[[package]]
-name = "rust-sandbox"
-version = "0.1.0"
-dependencies = [
- "hecs",
- "piston",
- "piston2d-graphics",
- "piston2d-opengl_graphics",
- "pistoncore-glutin_window",
- "rusttype 0.9.1",
- "vecmath",
-]
 
 [[package]]
 name = "rustc-demangle"

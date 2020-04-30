@@ -1,7 +1,7 @@
 use glutin_window::GlutinWindow as Window;
 use opengl_graphics::{GlGraphics, OpenGL};
 use piston::event_loop::{EventSettings, Events};
-use piston::input::{MouseScrollEvent, RenderEvent, UpdateEvent};
+use piston::input::{MouseScrollEvent, PressEvent, RenderEvent, UpdateEvent};
 use piston::window::WindowSettings;
 
 use crate::physics::force::ForceComponent;

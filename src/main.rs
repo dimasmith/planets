@@ -1,5 +1,5 @@
 use glutin_window::GlutinWindow as Window;
-use opengl_graphics::{GlGraphics, OpenGL};
+use opengl_graphics::{GlGraphics, OpenGL, Texture, TextureSettings};
 use piston::event_loop::{EventSettings, Events};
 use piston::input::{MouseScrollEvent, RenderEvent, UpdateEvent};
 use piston::window::WindowSettings;
@@ -9,14 +9,25 @@ use crate::physics::gravity::MassComponent;
 use crate::physics::motion::Motion;
 use crate::physics::Universe;
 use crate::render::camera::Camera;
-use crate::render::circle::CircleComponent;
 use crate::render::name::NameComponent;
 use crate::render::render_box::RenderBoxComponent;
+use crate::render::sprite::Sprite;
 use crate::render::trace::SpawnTraceSystem;
 use crate::render::Renderer;
+use image::io::Reader;
+use std::borrow::Borrow;
 
 mod physics;
 mod render;
+
+fn load_texture(name: &str) -> Texture {
+    let texture_settings = TextureSettings::new();
+    let kerbin_texture_image = Reader::open("textures/".to_string() + name + ".png")
+        .unwrap()
+        .decode()
+        .unwrap();
+    Texture::from_image(kerbin_texture_image.into_rgba().borrow(), &texture_settings)
+}
 
 fn main() {
     let opengl = OpenGL::V4_5;
@@ -33,9 +44,9 @@ fn main() {
         Motion::position(kerbin_position),
         NameComponent::new("Kerbin"),
         MassComponent::new(5.2915158e22),
-        CircleComponent::new([0.2, 0.2, 0.9, 1.0]),
+        Sprite::image(load_texture("kerbin")),
         ForceComponent::zero(),
-        RenderBoxComponent::new(),
+        RenderBoxComponent::centered_square(48.0),
     ));
 
     let mun_position = [-12.0e6, 0.0];
@@ -43,9 +54,9 @@ fn main() {
         Motion::new_position_velocity(mun_position, [0.0, 543.0]),
         NameComponent::new("Mun"),
         MassComponent::new(9.7599066e20),
-        CircleComponent::new([0.5, 0.5, 0.5, 1.0]),
+        Sprite::image(load_texture("mun")),
         ForceComponent::zero(),
-        RenderBoxComponent::centered_square(10.0),
+        RenderBoxComponent::centered_square(16.0),
         SpawnTraceSystem::new(),
     ));
 
@@ -54,7 +65,7 @@ fn main() {
         Motion::new_position_velocity(minmus_position, [0.0, -274.0]),
         NameComponent::new("Minmus"),
         MassComponent::new(2.645758e19),
-        CircleComponent::new([0.5, 1.0, 0.5, 1.0]),
+        Sprite::image(load_texture("minmus")),
         ForceComponent::zero(),
         RenderBoxComponent::centered_square(8.0),
         SpawnTraceSystem::new(),
@@ -64,7 +75,7 @@ fn main() {
         NameComponent::new("Phobos"),
         Motion::new_position_velocity([-47e6, 0.0], [0.0, 247.0 * 0.75]),
         MassComponent::new(2.645758e19),
-        CircleComponent::new([1.0, 0.2, 0.2, 1.0]),
+        Sprite::image(load_texture("phobos")),
         ForceComponent::zero(),
         RenderBoxComponent::centered_square(8.0),
         SpawnTraceSystem::new(),
@@ -74,7 +85,7 @@ fn main() {
         NameComponent::new("Deimos"),
         Motion::new_position_velocity([0.0, -47e6], [-247.0 * 0.75, 0.0]),
         MassComponent::new(2.645758e19),
-        CircleComponent::new([1.0, 1.0, 0.2, 1.0]),
+        Sprite::image(load_texture("deimos")),
         ForceComponent::zero(),
         RenderBoxComponent::centered_square(8.0),
         SpawnTraceSystem::new(),

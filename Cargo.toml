@@ -19,3 +19,6 @@ version = "1.0.0"
 
 [dependencies.interpolation]
 version = "0.2.0"
+
+[dependencies.image]
+version = "^0.23.4"

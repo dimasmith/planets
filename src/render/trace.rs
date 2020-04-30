@@ -1,6 +1,6 @@
 use crate::physics::motion::Motion;
-use crate::render::circle::CircleComponent;
 use crate::render::render_box::RenderBoxComponent;
+use crate::render::sprite::{Sprite, SpriteKind};
 use graphics::types::Color;
 use graphics::{Context, Ellipse};
 use hecs::World;
@@ -102,15 +102,16 @@ impl TraceSpawnSystem {
         self.ticks_since_spawn -= 1;
         if self.ticks_since_spawn <= 0 {
             let mut traces: Vec<(RenderBoxComponent, Color, Motion)> = vec![];
-            for (_id, (render_box, sprite, motion, _trace_spawn)) in &mut world.query::<(
-                &RenderBoxComponent,
-                &CircleComponent,
-                &Motion,
-                &SpawnTraceSystem,
-            )>() {
-                let trace_box = render_box.clone();
-                let color = sprite.circle.color;
-                traces.push((trace_box, color, motion.clone()));
+            for (_id, (render_box, sprite, motion, _trace_spawn)) in
+                &mut world.query::<(&RenderBoxComponent, &Sprite, &Motion, &SpawnTraceSystem)>()
+            {
+                match sprite.kind() {
+                    SpriteKind::Circle(_, color) => {
+                        let trace_box = render_box.clone();
+                        traces.push((trace_box, *color, motion.clone()));
+                    }
+                    SpriteKind::Image(_, _) => {}
+                }
             }
 
             for (render_box, color, motion) in traces.iter() {

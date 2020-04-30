@@ -3,20 +3,20 @@ use opengl_graphics::{Filter, GlGraphics, GlyphCache, TextureSettings};
 use piston::input::RenderArgs;
 
 use crate::render::camera::{Camera, CameraSystem};
-use crate::render::circle::CircleSystem;
 use crate::render::name::NameSystem;
+use crate::render::sprite::SpriteSystem;
 use crate::render::trace::{RenderTraceSystem, TraceSpawnSystem};
 
 pub mod camera;
-pub mod circle;
 pub mod name;
 pub mod render_box;
+pub mod sprite;
 pub mod trace;
 
 pub struct Renderer<'r> {
     pub gl: GlGraphics,
     camera_system: CameraSystem,
-    circle_system: CircleSystem,
+    circle_system: SpriteSystem,
     name_system: NameSystem,
     trace_system: RenderTraceSystem,
     trace_spawn_system: TraceSpawnSystem,
@@ -30,7 +30,7 @@ impl Renderer<'_> {
         Renderer {
             gl,
             camera_system: CameraSystem::new(camera),
-            circle_system: CircleSystem::new(),
+            circle_system: SpriteSystem::new(),
             name_system: NameSystem::new(),
             trace_system: RenderTraceSystem::new(),
             trace_spawn_system: TraceSpawnSystem::new(),

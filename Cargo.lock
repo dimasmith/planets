@@ -853,6 +853,7 @@ name = "planetz"
 version = "0.1.0"
 dependencies = [
  "hecs",
+ "image",
  "interpolation",
  "piston",
  "piston2d-graphics",

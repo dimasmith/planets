@@ -10,14 +10,7 @@ pub struct RenderBoxComponent {
     bound: Rectangle,
 }
 
-const DEFAULT_RADIUS: f64 = 25.0;
-
 impl RenderBoxComponent {
-    /// create rendering position component with default radius of 25.0
-    pub fn new() -> Self {
-        RenderBoxComponent::centered_square(DEFAULT_RADIUS)
-    }
-
     /// create centered rendering box with a radius (half-length of the square side)
     pub fn centered_square(radius: f64) -> Self {
         let size = radius * 2.0;

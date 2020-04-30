@@ -101,7 +101,7 @@ impl TraceSpawnSystem {
         self.ticks_since_spawn -= 1;
         if self.ticks_since_spawn <= 0 {
             let mut traces: Vec<(RenderBoxComponent, Color)> = vec![];
-            for (id, (render_box, sprite, _trace_spawn)) in
+            for (_id, (render_box, sprite, _trace_spawn)) in
                 &mut world.query::<(&RenderBoxComponent, &CircleComponent, &SpawnTraceSystem)>()
             {
                 let trace_box = render_box.clone();

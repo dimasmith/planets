@@ -4,7 +4,6 @@ use graphics::types::FontSize;
 use graphics::{Context, Transformed};
 use hecs::World;
 use opengl_graphics::{GlGraphics, GlyphCache};
-use std::error::Error;
 
 pub struct NameComponent<'n> {
     pub name: &'n str,
@@ -32,7 +31,7 @@ impl NameSystem {
         context: Context,
         gl: &mut GlGraphics,
     ) {
-        for (id, (name_component, render_box)) in
+        for (_id, (name_component, render_box)) in
             &mut world.query::<(&NameComponent, &RenderBoxComponent)>()
         {
             let name = name_component.name;

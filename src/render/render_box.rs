@@ -1,5 +1,3 @@
-use crate::physics::motion::Position;
-use graphics::rectangle::centered_square;
 use graphics::types::Rectangle;
 use vecmath::Vector2;
 
@@ -28,11 +26,6 @@ impl RenderBoxComponent {
             radius,
             bound: [-radius, -radius, size, size],
         }
-    }
-
-    /// get current rendering position
-    pub fn position(&self) -> RenderingPosition {
-        self.position
     }
 
     /// drawing bound of the render box

@@ -34,7 +34,6 @@ impl GravityCalculation {
         let force = G * mass_product / distance_squared;
         let direction = vecmath::vec2_normalized(vecmath::vec2_sub(rhs.position, self.position));
         let acceleration = vecmath::vec2_scale(direction, force);
-        let l = vecmath::vec2_len(acceleration);
         acceleration
     }
 }
@@ -69,7 +68,7 @@ impl GravitySystem {
             });
         }
         let accels = accelerations(&gravities);
-        for (id, (force_component)) in &mut world.query::<(&mut ForceComponent)>() {
+        for (id, (force_component,)) in &mut world.query::<(&mut ForceComponent,)>() {
             match accels.get(&id) {
                 Some(accel) => {
                     force_component.force = *accel;

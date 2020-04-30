@@ -1,21 +1,18 @@
 use crate::physics::force::ForceSystem;
 use crate::physics::gravity::GravitySystem;
 use crate::physics::motion::MotionSystem;
-use crate::physics::propulsion::PropulsionSystem;
 use hecs::World;
 use piston::input::UpdateArgs;
 
 pub mod force;
 pub mod gravity;
 pub mod motion;
-pub mod propulsion;
 
 pub struct Universe {
     pub acceleration: f64,
     motion: MotionSystem,
     gravity: GravitySystem,
     force: ForceSystem,
-    propulsion: PropulsionSystem,
 }
 impl Universe {
     pub fn new() -> Self {
@@ -24,7 +21,6 @@ impl Universe {
             motion: MotionSystem::new(),
             gravity: GravitySystem::new(),
             force: ForceSystem::new(),
-            propulsion: PropulsionSystem::new(),
         }
     }
 
@@ -32,7 +28,6 @@ impl Universe {
         let dt = args.dt * self.acceleration;
         self.force.reset(world);
         self.gravity.update(world);
-        self.propulsion.update(world);
         self.force.update(world);
         self.motion.update(world, dt);
     }

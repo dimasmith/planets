@@ -1,16 +1,11 @@
-use graphics::Context;
 use hecs::World;
 use opengl_graphics::{Filter, GlGraphics, GlyphCache, TextureSettings};
 use piston::input::RenderArgs;
-use vecmath;
-use vecmath::Vector2;
 
-use crate::physics::motion::Position;
 use crate::render::camera::{Camera, CameraSystem};
 use crate::render::circle::CircleSystem;
 use crate::render::name::NameSystem;
 use crate::render::trace::{RenderTraceSystem, TraceSpawnSystem};
-use graphics::character::CharacterCache;
 
 pub mod camera;
 pub mod circle;
@@ -54,7 +49,7 @@ impl Renderer<'_> {
     }
 
     pub fn render(&mut self, args: RenderArgs, world: &mut World) {
-        let mut gl = &mut self.gl;
+        let gl = &mut self.gl;
         let glyphs = &mut self.glyphs;
 
         let mut context = gl.draw_begin(args.viewport());

@@ -10,10 +10,6 @@ pub struct ForceComponent {
 }
 
 impl ForceComponent {
-    pub fn new(force: Force) -> Self {
-        ForceComponent { force }
-    }
-
     pub fn zero() -> Self {
         ForceComponent { force: [0.0, 0.0] }
     }
@@ -28,14 +24,14 @@ impl ForceSystem {
 
     pub fn reset(&mut self, world: &mut World) {
         // reset forces at the beginning
-        for (id, (force)) in &mut world.query::<(&mut ForceComponent)>() {
+        for (_id, (force,)) in &mut world.query::<(&mut ForceComponent,)>() {
             force.force = [0.0, 0.0];
         }
     }
 
     pub fn update(&mut self, world: &mut World) {
         // reset forces at the beginning
-        for (id, (force_component, mass_component, motion)) in
+        for (_id, (force_component, mass_component, motion)) in
             &mut world.query::<(&ForceComponent, &MassComponent, &mut Motion)>()
         {
             let acceleration =

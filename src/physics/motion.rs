@@ -21,19 +21,11 @@ impl Motion {
     }
 
     pub fn position(position: Position) -> Self {
-        Motion {
-            position,
-            velocity: [0.0, 0.0],
-            acceleration: [0.0, 0.0],
-        }
+        Motion::new(position, [0.0, 0.0], [0.0, 0.0])
     }
 
     pub fn new_position_velocity(position: Position, velocity: Velocity) -> Self {
-        Motion {
-            position,
-            velocity,
-            acceleration: [0.0, 0.0],
-        }
+        Motion::new(position, velocity, [0.0, 0.0])
     }
 }
 
@@ -49,7 +41,7 @@ impl MotionSystem {
     }
 
     pub fn update(&mut self, world: &mut World, dt: f64) {
-        for (id, (motion)) in &mut world.query::<(&mut Motion)>() {
+        for (_id, (motion,)) in &mut world.query::<(&mut Motion,)>() {
             self.advance(motion, dt);
         }
     }

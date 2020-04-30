@@ -1,5 +1,4 @@
 use crate::physics::motion::{Motion, Position};
-use crate::render::circle::CircleComponent;
 use crate::render::render_box::RenderBoxComponent;
 use graphics::{Context, Transformed};
 use hecs::{Entity, World};

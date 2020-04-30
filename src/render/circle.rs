@@ -1,10 +1,8 @@
-use graphics::character::CharacterCache;
-use graphics::types::{Color, Radius, Rectangle};
+use graphics::types::Color;
 use graphics::{Context, Ellipse};
 use hecs::World;
 use opengl_graphics::GlGraphics;
 
-use crate::physics::motion::Position;
 use crate::render::render_box::RenderBoxComponent;
 
 pub struct CircleComponent {
@@ -27,7 +25,7 @@ impl CircleSystem {
 
     pub fn update(&self, world: &mut World, context: Context, gl: &mut GlGraphics) {
         let draw_state = &context.draw_state;
-        for (id, (sprite, render_box)) in
+        for (_id, (sprite, render_box)) in
             &mut world.query::<(&mut CircleComponent, &RenderBoxComponent)>()
         {
             sprite

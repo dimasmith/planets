@@ -1,7 +1,7 @@
 use glutin_window::GlutinWindow as Window;
 use opengl_graphics::{GlGraphics, OpenGL};
 use piston::event_loop::{EventSettings, Events};
-use piston::input::{MouseScrollEvent, PressEvent, RenderEvent, UpdateEvent};
+use piston::input::{MouseScrollEvent, RenderEvent, UpdateEvent};
 use piston::window::WindowSettings;
 
 use crate::physics::force::ForceComponent;
@@ -14,7 +14,6 @@ use crate::render::name::NameComponent;
 use crate::render::render_box::RenderBoxComponent;
 use crate::render::trace::SpawnTraceSystem;
 use crate::render::Renderer;
-use rusttype::Font;
 
 mod physics;
 mod render;
@@ -40,7 +39,7 @@ fn main() {
     ));
 
     let mun_position = [-12.0e6, 0.0];
-    let mun = world.spawn((
+    world.spawn((
         Motion::new_position_velocity(mun_position, [0.0, 543.0]),
         NameComponent::new("Mun"),
         MassComponent::new(9.7599066e20),
@@ -81,7 +80,7 @@ fn main() {
         SpawnTraceSystem::new(),
     ));
 
-    let mut camera = Camera::tracking(400.0 / 47.0 * 1.0e-6, kerbin);
+    let camera = Camera::tracking(400.0 / 47.0 * 1.0e-6, kerbin);
     let mut renderer = Renderer::camera(GlGraphics::new(opengl), camera);
     let mut universe = Universe::new();
 

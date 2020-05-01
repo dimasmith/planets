@@ -1,7 +1,7 @@
 use glutin_window::GlutinWindow as Window;
 use opengl_graphics::{GlGraphics, OpenGL};
 use piston::event_loop::{EventSettings, Events};
-use piston::input::{MouseScrollEvent, RenderEvent, UpdateEvent};
+use piston::input::{Button, ButtonEvent, Key, MouseScrollEvent, RenderEvent, UpdateEvent};
 use piston::window::WindowSettings;
 
 use crate::loader::loader::{ModelLoader, Planet, ToEntityBuilder};
@@ -68,6 +68,21 @@ fn main() {
                 camera.zoom_in();
             }
         }
+
+        if let Some(args) = e.button_args() {
+            match args.button {
+                Button::Keyboard(key) => match key {
+                    Key::Comma => {
+                        universe.slow_down();
+                    }
+                    Key::Period => {
+                        universe.speed_up();
+                    }
+                    _ => {}
+                },
+                _ => {}
+            }
+        }
     }
 }
 
@@ -105,7 +120,7 @@ fn load_models() -> Vec<Box<dyn ToEntityBuilder>> {
         velocity: [0.0, 247.0 * 0.75],
         mass: 2.645758e19,
         visible_radius: 8.0,
-        image: "minmus",
+        image: "phobos",
     });
 
     let deimos = Box::new(Planet {

@@ -4,19 +4,48 @@ use crate::physics::motion::MotionSystem;
 use hecs::World;
 use piston::input::UpdateArgs;
 
+const ACCELERATIONS: [f64; 14] = [
+    1.0e1, 1.0e2, 2.5e2, 5.0e2, 7.5e2, 1.0e3, 2.5e3, 5.0e3, 7.5e3, 1.0e4, 2.5e4, 5.0e4, 7.5e4,
+    1.0e5,
+];
+
 pub struct Universe {
     pub acceleration: f64,
     motion: MotionSystem,
     gravity: GravitySystem,
     force: ForceSystem,
+    selected_acceleration: usize,
 }
 impl Universe {
     pub fn new() -> Self {
         Universe {
-            acceleration: 25.0e3,
+            acceleration: ACCELERATIONS[9],
             motion: MotionSystem::new(),
             gravity: GravitySystem::new(),
             force: ForceSystem::new(),
+            selected_acceleration: 9,
+        }
+    }
+
+    pub fn acceleration(&self) -> f64 {
+        self.acceleration
+    }
+
+    pub fn change_acceleration(&mut self, new_acceleration: f64) {
+        self.acceleration = new_acceleration;
+    }
+
+    pub fn speed_up(&mut self) {
+        if self.selected_acceleration < ACCELERATIONS.len() - 1 {
+            self.selected_acceleration += 1;
+            self.change_acceleration(ACCELERATIONS[self.selected_acceleration]);
+        }
+    }
+
+    pub fn slow_down(&mut self) {
+        if self.selected_acceleration > 0 {
+            self.selected_acceleration -= 1;
+            self.change_acceleration(ACCELERATIONS[self.selected_acceleration]);
         }
     }
 

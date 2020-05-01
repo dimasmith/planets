@@ -92,7 +92,8 @@ fn main() {
     ));
 
     let camera = Camera::tracking(400.0 / 47.0 * 1.0e-6, kerbin);
-    let mut renderer = Renderer::camera(GlGraphics::new(opengl), camera);
+    let mut gl = GlGraphics::new(opengl);
+    let mut renderer = Renderer::camera(&mut gl, camera);
     let mut universe = Universe::new();
 
     let mut events = Events::new(EventSettings::new());

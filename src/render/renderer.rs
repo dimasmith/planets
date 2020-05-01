@@ -8,7 +8,7 @@ use crate::render::sprite::SpriteSystem;
 use crate::render::trace::{RenderTraceSystem, TraceSpawnSystem};
 
 pub struct Renderer<'r> {
-    pub gl: GlGraphics,
+    gl: &'r mut GlGraphics,
     camera_system: CameraSystem,
     circle_system: SpriteSystem,
     name_system: NameSystem,
@@ -19,8 +19,8 @@ pub struct Renderer<'r> {
 
 const BACK: [f32; 4] = [0.0, 0.0, 0.0, 1.0];
 
-impl Renderer<'_> {
-    pub fn camera(gl: GlGraphics, camera: Camera) -> Renderer<'static> {
+impl<'r> Renderer<'r> {
+    pub fn camera(gl: &'r mut GlGraphics, camera: Camera) -> Renderer<'r> {
         Renderer {
             gl,
             camera_system: CameraSystem::new(camera),
@@ -32,7 +32,7 @@ impl Renderer<'_> {
         }
     }
 
-    fn character_cache() -> GlyphCache<'static> {
+    fn character_cache() -> GlyphCache<'r> {
         let font_data = include_bytes!("../fonts/JetBrainsMono-Regular.ttf");
         let texture_settings = TextureSettings::new().filter(Filter::Nearest);
         GlyphCache::from_bytes(font_data, (), texture_settings).expect("could not load font")
@@ -43,7 +43,7 @@ impl Renderer<'_> {
     }
 
     pub fn render(&mut self, args: RenderArgs, world: &mut World) {
-        let gl = &mut self.gl;
+        let gl = &mut *self.gl;
         let glyphs = &mut self.glyphs;
 
         let mut context = gl.draw_begin(args.viewport());

@@ -7,13 +7,13 @@ use piston::window::WindowSettings;
 use crate::physics::force::ForceComponent;
 use crate::physics::gravity::MassComponent;
 use crate::physics::motion::Motion;
-use crate::physics::Universe;
+use crate::physics::universe::Universe;
 use crate::render::camera::Camera;
 use crate::render::name::NameComponent;
 use crate::render::render_box::RenderBoxComponent;
+use crate::render::renderer::Renderer;
 use crate::render::sprite::Sprite;
 use crate::render::trace::SpawnTraceSystem;
-use crate::render::Renderer;
 use image::io::Reader;
 use std::borrow::Borrow;
 

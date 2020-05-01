@@ -7,6 +7,7 @@ use piston::input::RenderArgs;
 use std::collections::HashMap;
 
 pub enum TrackingMode {
+    Fixed,
     Tracking(Entity),
 }
 
@@ -24,6 +25,15 @@ impl Camera {
             zoom_step: zoom / 16.0,
             focus: [0.0, 0.0],
             tracking: TrackingMode::Tracking(entity),
+        }
+    }
+
+    pub fn fixed(zoom: f64) -> Self {
+        Camera {
+            zoom: Zoom::new(zoom),
+            zoom_step: zoom / 16.0,
+            focus: [0.0, 0.0],
+            tracking: TrackingMode::Fixed,
         }
     }
 
@@ -64,6 +74,9 @@ impl CameraSystem {
 
         let screen_center = vecmath::vec2_scale(args.window_size, 0.5);
         match self.camera.tracking {
+            TrackingMode::Fixed => {
+                self.camera.focus = screen_center;
+            }
             TrackingMode::Tracking(e) => {
                 let entity_position = projected_positions_by_entity[&e];
                 let focus = vecmath::vec2_sub(screen_center, entity_position);

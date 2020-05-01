@@ -11,6 +11,14 @@ pub enum TrackingMode {
     Tracking(Entity),
 }
 
+pub struct TrackingComponent {}
+
+impl TrackingComponent {
+    pub fn new() -> Self {
+        TrackingComponent {}
+    }
+}
+
 pub struct Camera {
     zoom: Zoom,
     zoom_step: f64,
@@ -19,6 +27,7 @@ pub struct Camera {
 }
 
 impl Camera {
+    #[allow(dead_code)]
     pub fn tracking(zoom: f64, entity: Entity) -> Self {
         Camera {
             zoom: Zoom::new(zoom),
@@ -52,6 +61,10 @@ impl Camera {
     fn update_zoom(&mut self) {
         self.zoom.update();
     }
+
+    fn track(&mut self, entity: Entity) {
+        self.tracking = TrackingMode::Tracking(entity);
+    }
 }
 
 pub struct CameraSystem {
@@ -70,6 +83,10 @@ impl CameraSystem {
             let projected_position = self.camera.project(motion.position);
             render_box.move_to(projected_position);
             projected_positions_by_entity.insert(id, projected_position);
+        }
+
+        for (id, (_tracking,)) in &mut world.query::<(&TrackingComponent,)>() {
+            self.camera.track(id);
         }
 
         let screen_center = vecmath::vec2_scale(args.window_size, 0.5);

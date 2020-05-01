@@ -1,5 +1,5 @@
 use glutin_window::GlutinWindow as Window;
-use opengl_graphics::{GlGraphics, OpenGL, Texture, TextureSettings};
+use opengl_graphics::{GlGraphics, OpenGL};
 use piston::event_loop::{EventSettings, Events};
 use piston::input::{MouseScrollEvent, RenderEvent, UpdateEvent};
 use piston::window::WindowSettings;
@@ -7,18 +7,9 @@ use piston::window::WindowSettings;
 use crate::loader::loader::{ModelLoader, Planet, ToEntityBuilder};
 use crate::loader::screen::LoadingScreen;
 use crate::loader::state::LoadingState;
-use crate::physics::force::ForceComponent;
-use crate::physics::gravity::MassComponent;
-use crate::physics::motion::{Motion, Velocity};
 use crate::physics::universe::Universe;
 use crate::render::camera::Camera;
-use crate::render::name::NameComponent;
-use crate::render::render_box::RenderBoxComponent;
 use crate::render::renderer::Renderer;
-use crate::render::sprite::Sprite;
-use crate::render::trace::SpawnTraceSystem;
-use image::io::Reader;
-use std::borrow::Borrow;
 
 mod loader;
 mod physics;
@@ -44,7 +35,7 @@ fn main() {
         if let Some(args) = e.render_args() {
             loading_screen.render(&loading_state, args, &mut gl);
         }
-        if let Some(args) = e.update_args() {
+        if let Some(_) = e.update_args() {
             model_loader.update(&mut loading_state, &mut world);
         }
 

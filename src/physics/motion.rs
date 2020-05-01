@@ -21,6 +21,7 @@ impl Motion {
         }
     }
 
+    #[allow(dead_code)]
     pub fn position(position: Position) -> Self {
         Motion::new(position, [0.0, 0.0], [0.0, 0.0])
     }

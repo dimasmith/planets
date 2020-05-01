@@ -2,11 +2,11 @@ use crate::loader::state::LoadingState;
 use crate::physics::force::ForceComponent;
 use crate::physics::gravity::{Mass, MassComponent};
 use crate::physics::motion::{Motion, Position, Velocity};
+use crate::render::camera::TrackingComponent;
 use crate::render::name::NameComponent;
 use crate::render::render_box::RenderBoxComponent;
 use crate::render::sprite::Sprite;
 use hecs::{EntityBuilder, World};
-use image::error::ImageFormatHint::Name;
 use image::io::Reader;
 use opengl_graphics::{Texture, TextureSettings};
 use std::borrow::Borrow;
@@ -32,6 +32,21 @@ where
             loading_state.set_progress(progress);
             self.loaded += 1;
         } else {
+            let heaviest_body = world
+                .query::<(&MassComponent,)>()
+                .iter()
+                .max_by(|x, y| {
+                    let a = ((x.1).0).mass;
+                    let b = ((y.1).0).mass;
+                    a.partial_cmp(&b).unwrap()
+                })
+                .unwrap()
+                .0;
+
+            world
+                .insert_one(heaviest_body, TrackingComponent::new())
+                .unwrap();
+
             loading_state.set_progress(1.0);
         }
     }

@@ -81,6 +81,7 @@ impl RenderTraceSystem {
 pub struct SpawnTraceSystem {}
 
 impl SpawnTraceSystem {
+    #[allow(dead_code)]
     pub fn new() -> Self {
         SpawnTraceSystem {}
     }

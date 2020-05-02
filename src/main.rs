@@ -103,7 +103,7 @@ fn load_models() -> Vec<Box<dyn ToEntityBuilder>> {
         position: [-12.0e6, 0.0],
         velocity: [0.0, 543.0],
         mass: 9.7599066e20,
-        visible_radius: 16.0,
+        visible_radius: 24.0,
         image: "mun",
     });
 
@@ -112,25 +112,25 @@ fn load_models() -> Vec<Box<dyn ToEntityBuilder>> {
         position: [47.0e6, 0.0],
         velocity: [0.0, -274.0],
         mass: 2.645758e19,
-        visible_radius: 8.0,
+        visible_radius: 16.0,
         image: "minmus",
     });
 
     let phobos = Box::new(Planet {
         name: "Phobos",
         position: [-47e6, 0.0],
-        velocity: [0.0, 247.0 * 0.75],
+        velocity: [0.0, 247.0],
         mass: 2.645758e19,
-        visible_radius: 8.0,
+        visible_radius: 16.0,
         image: "phobos",
     });
 
     let deimos = Box::new(Planet {
         name: "Deimos",
         position: [0.0, -47e6],
-        velocity: [-247.0 * 0.75, 0.0],
+        velocity: [-247.0, 0.0],
         mass: 2.645758e19,
-        visible_radius: 8.0,
+        visible_radius: 16.0,
         image: "deimos",
     });
 

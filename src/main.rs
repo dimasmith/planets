@@ -4,14 +4,16 @@ use piston::event_loop::{EventSettings, Events};
 use piston::input::{Button, ButtonEvent, Key, MouseScrollEvent, RenderEvent, UpdateEvent};
 use piston::window::WindowSettings;
 
-use crate::loader::loader::{ModelLoader, Planet, ToEntityBuilder};
+use crate::loader::loader::{ModelLoader, ToEntityBuilder};
 use crate::loader::screen::LoadingScreen;
 use crate::loader::state::LoadingState;
+use crate::model::{Background, Planet};
 use crate::physics::universe::Universe;
 use crate::render::camera::Camera;
 use crate::render::renderer::Renderer;
 
 mod loader;
+mod model;
 mod physics;
 mod render;
 
@@ -132,5 +134,7 @@ fn load_models() -> Vec<Box<dyn ToEntityBuilder>> {
         image: "deimos",
     });
 
-    vec![kerbin, mun, minmus, phobos, deimos]
+    let background = Box::new(Background { image: "nebula" });
+
+    vec![kerbin, mun, minmus, phobos, deimos, background]
 }

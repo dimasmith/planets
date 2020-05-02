@@ -27,6 +27,7 @@ impl Universe {
         }
     }
 
+    #[allow(dead_code)]
     pub fn acceleration(&self) -> f64 {
         self.acceleration
     }

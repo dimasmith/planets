@@ -2,6 +2,7 @@ use hecs::World;
 use opengl_graphics::{Filter, GlGraphics, GlyphCache, TextureSettings};
 use piston::input::RenderArgs;
 
+use crate::render::background::BackgroundSystem;
 use crate::render::camera::{Camera, CameraSystem};
 use crate::render::name::NameSystem;
 use crate::render::sprite::SpriteSystem;
@@ -14,6 +15,7 @@ pub struct Renderer<'r> {
     name_system: NameSystem,
     trace_system: RenderTraceSystem,
     trace_spawn_system: TraceSpawnSystem,
+    background: BackgroundSystem,
     glyphs: GlyphCache<'r>,
 }
 
@@ -28,6 +30,7 @@ impl<'r> Renderer<'r> {
             name_system: NameSystem::new(),
             trace_system: RenderTraceSystem::new(),
             trace_spawn_system: TraceSpawnSystem::new(),
+            background: BackgroundSystem::new(),
             glyphs: Renderer::character_cache(),
         }
     }
@@ -47,10 +50,10 @@ impl<'r> Renderer<'r> {
         let glyphs = &mut self.glyphs;
 
         let mut context = gl.draw_begin(args.viewport());
-        context = self.camera_system.update(context, world, args);
-
-        // clear the screen
         graphics::clear(BACK, gl);
+        self.background.update(world, context, gl, args);
+
+        context = self.camera_system.update(context, world, args);
 
         self.trace_spawn_system.update(world);
         self.trace_system.update(world, context, gl);

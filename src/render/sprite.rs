@@ -16,7 +16,6 @@ pub struct Sprite {
 
 impl Sprite {
     /// create colored circle sprite
-    #[allow(dead_code)]
     pub fn circle(color: Color) -> Self {
         let circle = Ellipse::new(color);
         Sprite {

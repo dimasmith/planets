@@ -12,10 +12,10 @@ use crate::physics::universe::Universe;
 use crate::render::camera::Camera;
 use crate::render::renderer::Renderer;
 
-mod loader;
-mod model;
-mod physics;
-mod render;
+pub mod loader;
+pub mod model;
+pub mod physics;
+pub mod render;
 
 fn main() {
     let opengl = OpenGL::V4_5;

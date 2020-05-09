@@ -1,16 +1,18 @@
 use hecs::World;
-use opengl_graphics::GlGraphics;
 use piston::input::RenderArgs;
 
+use crate::graphics::gl::SharedGraphics;
 use crate::render::background::BackgroundSystem;
 use crate::render::camera::{Camera, CameraSystem};
 use crate::render::name::NameSystem;
 use crate::render::sprite::SpriteSystem;
 use crate::render::trace::{RenderTraceSystem, TraceSpawnSystem};
 use crate::text::SharedGlyphCache;
+use graphics::color::BLACK;
+use graphics::Graphics;
 
 pub struct Renderer<'r> {
-    gl: &'r mut GlGraphics,
+    gl: SharedGraphics,
     camera_system: CameraSystem,
     circle_system: SpriteSystem,
     name_system: NameSystem,
@@ -20,10 +22,8 @@ pub struct Renderer<'r> {
     glyphs: SharedGlyphCache<'r>,
 }
 
-const BACK: [f32; 4] = [0.0, 0.0, 0.0, 1.0];
-
 impl<'r> Renderer<'r> {
-    pub fn camera(gl: &'r mut GlGraphics, camera: Camera, glyphs: SharedGlyphCache<'r>) -> Self {
+    pub fn camera(gl: SharedGraphics, camera: Camera, glyphs: SharedGlyphCache<'r>) -> Self {
         Renderer {
             gl,
             camera_system: CameraSystem::new(camera),
@@ -41,11 +41,11 @@ impl<'r> Renderer<'r> {
     }
 
     pub fn render(&mut self, args: RenderArgs, world: &mut World) {
-        let gl = &mut *self.gl;
-        let glyphs = &mut self.glyphs.borrow_mut();
+        let gl = &mut (*self.gl).borrow_mut();
+        let glyphs = &mut (*self.glyphs).borrow_mut();
 
         let mut context = gl.draw_begin(args.viewport());
-        graphics::clear(BACK, gl);
+        gl.clear_color(BLACK);
         self.background.update(world, context, gl, args);
 
         context = self.camera_system.update(context, world, args);

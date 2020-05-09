@@ -3,19 +3,22 @@ use graphics::{Context, Transformed};
 use opengl_graphics::{GlGraphics, GlyphCache};
 use piston::input::RenderArgs;
 
+use crate::graphics::gl::SharedGraphics;
 use crate::loader::state::LoadingState;
 use crate::text::SharedGlyphCache;
 
 pub struct LoadingScreen<'l> {
+    gl: SharedGraphics,
     glyphs: SharedGlyphCache<'l>,
 }
 
 impl<'l> LoadingScreen<'l> {
-    pub fn new(glyphs: SharedGlyphCache<'l>) -> Self {
-        LoadingScreen { glyphs }
+    pub fn new(gl: SharedGraphics, glyphs: SharedGlyphCache<'l>) -> Self {
+        LoadingScreen { gl, glyphs }
     }
 
-    pub fn render(&mut self, state: &LoadingState, args: RenderArgs, gl: &mut GlGraphics) {
+    pub fn render(&mut self, state: &LoadingState, args: RenderArgs) {
+        let gl = &mut (*self.gl).borrow_mut();
         let glyphs = &mut (*self.glyphs).borrow_mut();
         let progress_line = format!("Loading... ({}%)", (state.progress() * 100.0) as i32);
         let context = gl.draw_begin(args.viewport());

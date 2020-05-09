@@ -8,7 +8,7 @@ use crate::render::render_box::RenderBoxComponent;
 use crate::render::sprite::Sprite;
 use hecs::EntityBuilder;
 use image::io::Reader;
-use opengl_graphics::{Texture, TextureSettings};
+use opengl_graphics::{Filter, Texture, TextureSettings};
 use std::borrow::Borrow;
 
 pub struct Planet {
@@ -47,10 +47,12 @@ impl ToEntityBuilder for Background {
 }
 
 fn load_texture(name: &str) -> Texture {
-    let texture_settings = TextureSettings::new();
-    let kerbin_texture_image = Reader::open("textures/".to_string() + name + ".png")
+    let image = Reader::open("assets/textures/".to_string() + name + ".png")
         .unwrap()
         .decode()
         .unwrap();
-    Texture::from_image(kerbin_texture_image.into_rgba().borrow(), &texture_settings)
+    Texture::from_image(
+        image.into_rgba().borrow(),
+        &mut TextureSettings::new().filter(Filter::Linear),
+    )
 }

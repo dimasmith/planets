@@ -1,3 +1,7 @@
+use piston::input::{
+    Button, ButtonEvent, ButtonState, Event, Key, MouseScrollEvent, RenderEvent, UpdateEvent,
+};
+
 use crate::core::events::EventHandler;
 use crate::core::gl::SharedGraphics;
 use crate::core::text::SharedGlyphCache;
@@ -5,7 +9,6 @@ use crate::core::world::SharedWorld;
 use crate::physics::universe::Universe;
 use crate::render::camera::Camera;
 use crate::render::renderer::Renderer;
-use piston::input::{Button, ButtonEvent, Event, Key, MouseScrollEvent, RenderEvent, UpdateEvent};
 
 pub struct SimulationStage<'a> {
     renderer: Renderer<'a>,
@@ -57,6 +60,11 @@ impl<'a> EventHandler for SimulationStage<'a> {
                     }
                     Key::Period => {
                         universe.speed_up();
+                    }
+                    Key::P => {
+                        if args.state == ButtonState::Press {
+                            universe.toggle_pause();
+                        }
                     }
                     _ => {}
                 },

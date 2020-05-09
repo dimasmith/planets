@@ -50,6 +50,14 @@ impl Universe {
         }
     }
 
+    pub fn toggle_pause(&mut self) {
+        if self.acceleration > 0.0 {
+            self.acceleration = 0.0;
+        } else {
+            self.change_acceleration(ACCELERATIONS[self.selected_acceleration]);
+        }
+    }
+
     pub fn update(&mut self, args: UpdateArgs, world: &mut World) {
         let dt = args.dt * self.acceleration;
         self.force.reset(world);

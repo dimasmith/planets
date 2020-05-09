@@ -1,5 +1,5 @@
 use glutin_window::GlutinWindow as Window;
-use opengl_graphics::{GlGraphics, OpenGL};
+use opengl_graphics::{Filter, GlGraphics, GlyphCache, OpenGL, TextureSettings};
 use piston::event_loop::{EventSettings, Events};
 use piston::input::{Button, ButtonEvent, Key, MouseScrollEvent, RenderEvent, UpdateEvent};
 use piston::window::WindowSettings;
@@ -11,11 +11,14 @@ use crate::model::{Background, Planet};
 use crate::physics::universe::Universe;
 use crate::render::camera::Camera;
 use crate::render::renderer::Renderer;
+use std::cell::RefCell;
+use std::rc::Rc;
 
 pub mod loader;
 pub mod model;
 pub mod physics;
 pub mod render;
+pub mod text;
 
 fn main() {
     let opengl = OpenGL::V4_5;
@@ -27,29 +30,35 @@ fn main() {
         .unwrap();
 
     let mut gl = GlGraphics::new(opengl);
-    let mut loading_state = LoadingState::new();
-    let models = load_models();
-    let mut model_loader = ModelLoader::new(models);
-    let mut loading_screen = LoadingScreen::new();
-    let mut world = hecs::World::new();
-    let mut events = Events::new(EventSettings::new());
-    while let Some(e) = events.next(&mut window) {
-        if let Some(args) = e.render_args() {
-            loading_screen.render(&loading_state, args, &mut gl);
-        }
-        if let Some(_) = e.update_args() {
-            model_loader.update(&mut loading_state, &mut world);
-        }
+    let glyph_cache = load_character_cache();
+    let shared_glyph_cache = Rc::new(RefCell::new(glyph_cache));
 
-        if loading_state.done() {
-            break;
+    let mut events = Events::new(EventSettings::new());
+    let mut world = hecs::World::new();
+
+    {
+        let mut loading_state = LoadingState::new();
+        let models = load_models();
+        let mut model_loader = ModelLoader::new(models);
+        let mut loading_screen = LoadingScreen::new(shared_glyph_cache.clone());
+        while let Some(e) = events.next(&mut window) {
+            if let Some(args) = e.render_args() {
+                loading_screen.render(&loading_state, args, &mut gl);
+            }
+            if let Some(_) = e.update_args() {
+                model_loader.update(&mut loading_state, &mut world);
+            }
+
+            if loading_state.done() {
+                break;
+            }
         }
     }
 
     // let camera = Camera::tracking(400.0 / 47.0 * 1.0e-6, kerbin);
     let camera = Camera::fixed(400.0 / 47.0 * 1.0e-6);
 
-    let mut renderer = Renderer::camera(&mut gl, camera);
+    let mut renderer = Renderer::camera(&mut gl, camera, shared_glyph_cache.clone());
     let mut universe = Universe::new();
 
     while let Some(e) = events.next(&mut window) {
@@ -86,6 +95,12 @@ fn main() {
             }
         }
     }
+}
+
+fn load_character_cache() -> GlyphCache<'static> {
+    let font_data = include_bytes!("../assets/fonts/font.ttf");
+    let texture_settings = TextureSettings::new().filter(Filter::Nearest);
+    GlyphCache::from_bytes(font_data, (), texture_settings).expect("could not load font")
 }
 
 fn load_models() -> Vec<Box<dyn ToEntityBuilder>> {

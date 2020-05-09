@@ -4,8 +4,8 @@ use piston::event_loop::{EventSettings, Events};
 use piston::input::{Button, ButtonEvent, Key, MouseScrollEvent, RenderEvent, UpdateEvent};
 use piston::window::WindowSettings;
 
-use crate::graphics::gl;
-use crate::graphics::text;
+use crate::core::text;
+use crate::core::{gl, world};
 use crate::loader::loader::{ModelLoader, ToEntityBuilder};
 use crate::loader::screen::LoadingScreen;
 use crate::loader::state::LoadingState;
@@ -14,7 +14,7 @@ use crate::physics::universe::Universe;
 use crate::render::camera::Camera;
 use crate::render::renderer::Renderer;
 
-pub mod graphics;
+pub mod core;
 pub mod loader;
 pub mod model;
 pub mod physics;
@@ -31,11 +31,12 @@ fn main() {
 
     let gl = gl::create(opengl);
     let glyphs = text::create_font_cache();
+    let world = world::create();
 
     let mut events = Events::new(EventSettings::new());
-    let mut world = hecs::World::new();
 
     {
+        let w = &mut (*world).borrow_mut();
         let mut loading_state = LoadingState::new();
         let models = load_models();
         let mut model_loader = ModelLoader::new(models);
@@ -45,7 +46,7 @@ fn main() {
                 loading_screen.render(&loading_state, args);
             }
             if let Some(_) = e.update_args() {
-                model_loader.update(&mut loading_state, &mut world);
+                model_loader.update(&mut loading_state, w);
             }
 
             if loading_state.done() {
@@ -59,14 +60,14 @@ fn main() {
 
     let mut renderer = Renderer::camera(gl.clone(), camera, glyphs.clone());
     let mut universe = Universe::new();
-
+    let w = &mut (*world).borrow_mut();
     while let Some(e) = events.next(&mut window) {
         if let Some(args) = e.render_args() {
-            renderer.render(args, &mut world);
+            renderer.render(args, w);
         }
 
         if let Some(args) = e.update_args() {
-            universe.update(args, &mut world);
+            universe.update(args, w);
         }
         if let Some(args) = e.mouse_scroll_args() {
             if args[1] < 0.0 {

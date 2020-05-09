@@ -1,7 +1,7 @@
 use hecs::World;
 use piston::input::RenderArgs;
 
-use crate::graphics::gl::SharedGraphics;
+use crate::core::gl::SharedGraphics;
 use crate::render::background::BackgroundSystem;
 use crate::render::camera::{Camera, CameraSystem};
 use crate::render::name::NameSystem;

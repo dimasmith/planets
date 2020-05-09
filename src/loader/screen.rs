@@ -3,7 +3,7 @@ use graphics::{Context, Transformed};
 use opengl_graphics::{GlGraphics, GlyphCache};
 use piston::input::RenderArgs;
 
-use crate::graphics::gl::SharedGraphics;
+use crate::core::gl::SharedGraphics;
 use crate::loader::state::LoadingState;
 use crate::text::SharedGlyphCache;
 

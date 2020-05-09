@@ -4,7 +4,7 @@ use piston::event_loop::{EventSettings, Events};
 use piston::input::{Button, ButtonEvent, Key, MouseScrollEvent, RenderEvent, UpdateEvent};
 use piston::window::WindowSettings;
 
-use crate::core::events::EventHandler;
+use crate::core::events::EventLoop;
 use crate::core::{gl, text, world};
 use crate::loader::loader::ToEntityBuilder;
 use crate::loader::stage::LoadingStage;
@@ -32,17 +32,11 @@ fn main() {
     let glyphs = text::create_font_cache();
     let world = world::create();
     let mut events = Events::new(EventSettings::new());
+    let mut event_loop = EventLoop::new(events);
 
-    {
-        let mut loading_stage =
-            LoadingStage::new(gl.clone(), glyphs.clone(), world.clone(), load_models());
-        while let Some(e) = events.next(&mut window) {
-            let stop = loading_stage.handle_event(e);
-            if stop {
-                break;
-            }
-        }
-    }
+    let mut loading_stage =
+        LoadingStage::new(gl.clone(), glyphs.clone(), world.clone(), load_models());
+    event_loop.activate_stage(&mut loading_stage, &mut window);
 
     // let camera = Camera::tracking(400.0 / 47.0 * 1.0e-6, kerbin);
     let camera = Camera::fixed(400.0 / 47.0 * 1.0e-6);

@@ -1,0 +1,47 @@
+Simulation (
+    planets: [
+        Planet (
+            position: (0.0, 0.0),
+            velocity: (0.0, 0.0),
+            name: "Kerbin",
+            mass: 5.2915158e22,
+            image: "kerbin",
+            visible_radius: 32.0,
+        ),
+        Planet (
+            position: (-12.0e6, 0.0),
+            velocity: (0.0, 543.0),
+            name: "Mun",
+            mass: 9.7599066e20,
+            image: "mun",
+            visible_radius: 16.0,
+        ),
+        Planet (
+            name: "Minmus",
+            position: (47.0e6, 0.0),
+            velocity: (0.0, -274.0),
+            mass: 2.645758e19,
+            visible_radius: 12.0,
+            image: "minmus",
+        ),
+        Planet (
+            name: "Phobos",
+            position: (-47e6, 0.0),
+            velocity: (0.0, 247.0),
+            mass: 2.645758e19,
+            visible_radius: 12.0,
+            image: "phobos",
+        ),
+        Planet (
+            name: "Deimos",
+            position: (0.0, -47e6),
+            velocity: (-247.0, 0.0),
+            mass: 2.645758e19,
+            visible_radius: 12.0,
+            image: "deimos",
+        ),
+    ],
+    background: Background (
+        image: "nebula"
+    )
+)

@@ -3,13 +3,13 @@ use crate::physics::gravity::MassComponent;
 use crate::render::camera::TrackingComponent;
 use hecs::{EntityBuilder, World};
 
-pub struct ModelLoader {
+pub struct ModelLoader<'a> {
     loaded: usize,
-    models: Vec<Box<dyn ToEntityBuilder>>,
+    models: Vec<&'a dyn ToEntityBuilder>,
 }
 
-impl ModelLoader {
-    pub fn new(models: Vec<Box<dyn ToEntityBuilder>>) -> Self {
+impl<'a> ModelLoader<'a> {
+    pub fn new(models: Vec<&'a dyn ToEntityBuilder>) -> Self {
         ModelLoader { loaded: 0, models }
     }
 

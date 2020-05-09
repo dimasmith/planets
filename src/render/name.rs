@@ -5,12 +5,12 @@ use graphics::{Context, Transformed};
 use hecs::World;
 use opengl_graphics::{GlGraphics, GlyphCache};
 
-pub struct NameComponent<'n> {
-    pub name: &'n str,
+pub struct NameComponent {
+    pub name: String,
 }
 
-impl<'n> NameComponent<'n> {
-    pub fn new(name: &'n str) -> Self {
+impl NameComponent {
+    pub fn new(name: String) -> Self {
         NameComponent { name }
     }
 }
@@ -34,7 +34,7 @@ impl NameSystem {
         for (_id, (name_component, render_box)) in
             &mut world.query::<(&NameComponent, &RenderBoxComponent)>()
         {
-            let name = name_component.name;
+            let name = name_component.name.as_str();
             let bound = render_box.bound();
             let text_length: f64 = glyphs
                 .width(FONT_SIZE, name)

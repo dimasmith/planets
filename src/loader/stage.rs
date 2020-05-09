@@ -10,7 +10,7 @@ use piston::input::{Event, RenderEvent, UpdateEvent};
 pub struct LoadingStage<'a> {
     world: SharedWorld,
     screen: LoadingScreen<'a>,
-    loader: ModelLoader,
+    loader: ModelLoader<'a>,
     state: LoadingState,
 }
 
@@ -19,7 +19,7 @@ impl<'a> LoadingStage<'a> {
         gl: SharedGraphics,
         glyphs: SharedGlyphCache<'a>,
         world: SharedWorld,
-        models: Vec<Box<dyn ToEntityBuilder>>,
+        models: Vec<&'a dyn ToEntityBuilder>,
     ) -> Self {
         let screen = LoadingScreen::new(gl.clone(), glyphs.clone());
         let loader = ModelLoader::new(models);

@@ -4,11 +4,10 @@ use piston::event_loop::{EventSettings, Events};
 use piston::input::{Button, ButtonEvent, Key, MouseScrollEvent, RenderEvent, UpdateEvent};
 use piston::window::WindowSettings;
 
-use crate::core::text;
-use crate::core::{gl, world};
-use crate::loader::loader::{ModelLoader, ToEntityBuilder};
-use crate::loader::screen::LoadingScreen;
-use crate::loader::state::LoadingState;
+use crate::core::events::EventHandler;
+use crate::core::{gl, text, world};
+use crate::loader::loader::ToEntityBuilder;
+use crate::loader::stage::LoadingStage;
 use crate::model::{Background, Planet};
 use crate::physics::universe::Universe;
 use crate::render::camera::Camera;
@@ -32,24 +31,14 @@ fn main() {
     let gl = gl::create(opengl);
     let glyphs = text::create_font_cache();
     let world = world::create();
-
     let mut events = Events::new(EventSettings::new());
 
     {
-        let w = &mut (*world).borrow_mut();
-        let mut loading_state = LoadingState::new();
-        let models = load_models();
-        let mut model_loader = ModelLoader::new(models);
-        let mut loading_screen = LoadingScreen::new(gl.clone(), glyphs.clone());
+        let mut loading_stage =
+            LoadingStage::new(gl.clone(), glyphs.clone(), world.clone(), load_models());
         while let Some(e) = events.next(&mut window) {
-            if let Some(args) = e.render_args() {
-                loading_screen.render(&loading_state, args);
-            }
-            if let Some(_) = e.update_args() {
-                model_loader.update(&mut loading_state, w);
-            }
-
-            if loading_state.done() {
+            let stop = loading_stage.handle_event(e);
+            if stop {
                 break;
             }
         }

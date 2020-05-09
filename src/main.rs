@@ -1,5 +1,5 @@
 use glutin_window::GlutinWindow as Window;
-use opengl_graphics::{Filter, GlGraphics, GlyphCache, OpenGL, TextureSettings};
+use opengl_graphics::{GlGraphics, OpenGL};
 use piston::event_loop::{EventSettings, Events};
 use piston::input::{Button, ButtonEvent, Key, MouseScrollEvent, RenderEvent, UpdateEvent};
 use piston::window::WindowSettings;
@@ -11,8 +11,6 @@ use crate::model::{Background, Planet};
 use crate::physics::universe::Universe;
 use crate::render::camera::Camera;
 use crate::render::renderer::Renderer;
-use std::cell::RefCell;
-use std::rc::Rc;
 
 pub mod loader;
 pub mod model;
@@ -30,8 +28,7 @@ fn main() {
         .unwrap();
 
     let mut gl = GlGraphics::new(opengl);
-    let glyph_cache = load_character_cache();
-    let shared_glyph_cache = Rc::new(RefCell::new(glyph_cache));
+    let shared_glyph_cache = text::create_font_cache();
 
     let mut events = Events::new(EventSettings::new());
     let mut world = hecs::World::new();
@@ -95,12 +92,6 @@ fn main() {
             }
         }
     }
-}
-
-fn load_character_cache() -> GlyphCache<'static> {
-    let font_data = include_bytes!("../assets/fonts/font.ttf");
-    let texture_settings = TextureSettings::new().filter(Filter::Nearest);
-    GlyphCache::from_bytes(font_data, (), texture_settings).expect("could not load font")
 }
 
 fn load_models() -> Vec<Box<dyn ToEntityBuilder>> {

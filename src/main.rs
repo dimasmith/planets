@@ -1,7 +1,6 @@
 use glutin_window::GlutinWindow as Window;
 use opengl_graphics::OpenGL;
 use piston::event_loop::{EventSettings, Events};
-use piston::input::{Button, ButtonEvent, Key, MouseScrollEvent, RenderEvent, UpdateEvent};
 use piston::window::WindowSettings;
 
 use crate::core::events::EventLoop;
@@ -9,15 +8,14 @@ use crate::core::{gl, text, world};
 use crate::loader::loader::ToEntityBuilder;
 use crate::loader::stage::LoadingStage;
 use crate::model::{Background, Planet};
-use crate::physics::universe::Universe;
-use crate::render::camera::Camera;
-use crate::render::renderer::Renderer;
+use crate::simulation::SimulationStage;
 
 pub mod core;
 pub mod loader;
 pub mod model;
 pub mod physics;
 pub mod render;
+pub mod simulation;
 
 fn main() {
     let opengl = OpenGL::V4_5;
@@ -29,55 +27,17 @@ fn main() {
         .unwrap();
 
     let gl = gl::create(opengl);
-    let glyphs = text::create_font_cache();
+    let glyphs = text::create();
     let world = world::create();
-    let mut events = Events::new(EventSettings::new());
+    let events = Events::new(EventSettings::new());
     let mut event_loop = EventLoop::new(events);
 
     let mut loading_stage =
         LoadingStage::new(gl.clone(), glyphs.clone(), world.clone(), load_models());
+    let mut simulation_stage = SimulationStage::new(gl.clone(), glyphs.clone(), world.clone());
+
     event_loop.activate_stage(&mut loading_stage, &mut window);
-
-    // let camera = Camera::tracking(400.0 / 47.0 * 1.0e-6, kerbin);
-    let camera = Camera::fixed(400.0 / 47.0 * 1.0e-6);
-
-    let mut renderer = Renderer::camera(gl.clone(), camera, glyphs.clone());
-    let mut universe = Universe::new();
-    let w = &mut (*world).borrow_mut();
-    while let Some(e) = events.next(&mut window) {
-        if let Some(args) = e.render_args() {
-            renderer.render(args, w);
-        }
-
-        if let Some(args) = e.update_args() {
-            universe.update(args, w);
-        }
-        if let Some(args) = e.mouse_scroll_args() {
-            if args[1] < 0.0 {
-                let camera = renderer.camera_as_mut();
-                camera.zoom_out();
-            }
-            if args[1] > 0.0 {
-                let camera = renderer.camera_as_mut();
-                camera.zoom_in();
-            }
-        }
-
-        if let Some(args) = e.button_args() {
-            match args.button {
-                Button::Keyboard(key) => match key {
-                    Key::Comma => {
-                        universe.slow_down();
-                    }
-                    Key::Period => {
-                        universe.speed_up();
-                    }
-                    _ => {}
-                },
-                _ => {}
-            }
-        }
-    }
+    event_loop.activate_stage(&mut simulation_stage, &mut window);
 }
 
 fn load_models() -> Vec<Box<dyn ToEntityBuilder>> {

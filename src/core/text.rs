@@ -4,7 +4,7 @@ use std::rc::Rc;
 
 pub type SharedGlyphCache<'g> = Rc<RefCell<GlyphCache<'g>>>;
 
-pub fn create_font_cache<'a>() -> SharedGlyphCache<'a> {
+pub fn create<'a>() -> SharedGlyphCache<'a> {
     let font_data = include_bytes!("../../assets/fonts/font.ttf");
     let texture_settings = TextureSettings::new().filter(Filter::Nearest);
     Rc::new(RefCell::new(

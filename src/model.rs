@@ -11,6 +11,7 @@ use image::io::Reader;
 use opengl_graphics::{Filter, Texture, TextureSettings};
 use std::borrow::Borrow;
 
+#[derive(Copy, Clone)]
 pub struct Planet {
     pub position: Position,
     pub velocity: Velocity,
@@ -34,6 +35,7 @@ impl ToEntityBuilder for Planet {
     }
 }
 
+#[derive(Copy, Clone)]
 pub struct Background {
     pub image: &'static str,
 }
@@ -55,4 +57,27 @@ fn load_texture(name: &str) -> Texture {
         image.into_rgba().borrow(),
         &mut TextureSettings::new().filter(Filter::Linear),
     )
+}
+
+pub struct Simulation {
+    planets: Vec<Planet>,
+    background: Background,
+}
+
+impl Simulation {
+    pub fn new(planets: Vec<Planet>, background: Background) -> Self {
+        Simulation {
+            planets,
+            background,
+        }
+    }
+
+    pub fn models(&self) -> Vec<Box<dyn ToEntityBuilder>> {
+        let mut models: Vec<Box<dyn ToEntityBuilder>> = vec![];
+        models.push(Box::new(self.background));
+        for planet in self.planets.iter() {
+            models.push(Box::new(*planet));
+        }
+        models
+    }
 }

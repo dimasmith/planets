@@ -1,3 +1,4 @@
+use crate::core::texture::load_texture;
 use crate::loader::loader::ToEntityBuilder;
 use crate::physics::force::ForceComponent;
 use crate::physics::gravity::{Mass, MassComponent};
@@ -8,10 +9,7 @@ use crate::render::render_box::RenderBoxComponent;
 use crate::render::sprite::Sprite;
 use assets_manager::{loader, Asset};
 use hecs::EntityBuilder;
-use image::io::Reader;
-use opengl_graphics::{Filter, Texture, TextureSettings};
 use serde::Deserialize;
-use std::borrow::Borrow;
 
 #[derive(Deserialize)]
 pub struct Planet {
@@ -65,17 +63,6 @@ impl ToEntityBuilder for Background {
         ))));
         builder
     }
-}
-
-fn load_texture(name: String) -> Texture {
-    let mut path = String::from("assets/textures/");
-    path.push_str(&name);
-    path.push_str(".png");
-    let image = Reader::open(path).unwrap().decode().unwrap();
-    Texture::from_image(
-        image.into_rgba().borrow(),
-        &mut TextureSettings::new().filter(Filter::Linear),
-    )
 }
 
 #[derive(Deserialize)]

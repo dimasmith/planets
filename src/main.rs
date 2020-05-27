@@ -25,6 +25,7 @@ fn main() {
     let opengl = OpenGL::V4_5;
     let mut window: Window = WindowSettings::new("n-Body Simulation", [1920, 1080])
         .graphics_api(opengl)
+        .vsync(true)
         .fullscreen(true)
         .exit_on_esc(true)
         .build()

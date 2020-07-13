@@ -27,7 +27,7 @@ World is built with [hecs](https://github.com/Ralith/hecs) - nice implementation
 
 # Issues that will immediately kick you
 
-* The resolution is hardcoded to 1950x1080 in fullscreen mode.
+* The resolution is hardcoded to 1920x1080 in fullscreen mode.
 * Paths to assets and file names inside are hardcoded.
 
 # Good words for

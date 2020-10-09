@@ -34,7 +34,7 @@ Simulation (
         ),
         Planet (
             name: "Deimos",
-            position: (0.0, -47e6),
+            position: (-47e6, -47e6),
             velocity: (-247.0, 0.0),
             mass: 2.645758e19,
             visible_radius: 12.0,

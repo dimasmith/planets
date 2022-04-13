@@ -43,7 +43,7 @@ impl TraceComponent {
 
     /// returns true when trace expires
     fn expired(&self) -> bool {
-        self.ttl <= 0
+        self.ttl == 0
     }
 }
 
@@ -101,7 +101,7 @@ impl TraceSpawnSystem {
 
     pub fn update(&mut self, world: &mut World) {
         self.ticks_since_spawn -= 1;
-        if self.ticks_since_spawn <= 0 {
+        if self.ticks_since_spawn == 0 {
             let mut traces: Vec<(RenderBoxComponent, Color, Motion)> = vec![];
             for (_id, (render_box, sprite, motion, _trace_spawn)) in
                 &mut world.query::<(&RenderBoxComponent, &Sprite, &Motion, &SpawnTraceSystem)>()

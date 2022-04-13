@@ -14,15 +14,13 @@ piston2d-opengl_graphics = "^0"
 hecs = "^0.2.12"
 rusttype = "^0.9.1"
 serde = "1.0"
+image = "^0"
 
 [dependencies.vecmath]
 version = "^1.0.0"
 
 [dependencies.interpolation]
 version = "^0.2.0"
-
-[dependencies.image]
-version = "^0.23.4"
 
 [dependencies.assets_manager]
 version = "0.2.2"

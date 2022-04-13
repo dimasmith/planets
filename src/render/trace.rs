@@ -38,7 +38,7 @@ impl TraceComponent {
     /// update the trace. fade the color and reduce ttl
     fn update(&mut self) {
         self.ttl -= 1;
-        self.color[3] = self.color[3] - DELTA_ALPHA;
+        self.color[3] -= DELTA_ALPHA;
     }
 
     /// returns true when trace expires
@@ -108,15 +108,15 @@ impl TraceSpawnSystem {
             {
                 match sprite.kind() {
                     SpriteKind::Circle(_, color) => {
-                        let trace_box = render_box.clone();
-                        traces.push((trace_box, *color, motion.clone()));
+                        let trace_box = *render_box;
+                        traces.push((trace_box, *color, *motion));
                     }
                     SpriteKind::Image(_, _) => {}
                 }
             }
 
             for (render_box, color, motion) in traces.iter() {
-                let mut m = motion.clone();
+                let mut m = *motion;
                 m.velocity = [0.0, 0.0];
                 m.acceleration = [0.0, 0.0];
                 world.spawn((TraceComponent::new(*color), *render_box, m));

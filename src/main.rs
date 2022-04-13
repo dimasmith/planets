@@ -43,7 +43,7 @@ fn main() {
         world.clone(),
         simulation.models(),
     );
-    let mut simulation_stage = SimulationStage::new(gl.clone(), glyphs.clone(), world.clone());
+    let mut simulation_stage = SimulationStage::new(gl, glyphs.clone(), world);
 
     event_loop.activate_stage(&mut loading_stage, &mut window);
     event_loop.activate_stage(&mut simulation_stage, &mut window);

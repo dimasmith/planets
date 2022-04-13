@@ -10,6 +10,6 @@ pub fn load_texture(name: String) -> Texture {
     let image = Reader::open(path).unwrap().decode().unwrap();
     Texture::from_image(
         image.into_rgba8().borrow(),
-        &mut TextureSettings::new().filter(Filter::Linear),
+        &TextureSettings::new().filter(Filter::Linear),
     )
 }

@@ -37,7 +37,7 @@ impl GravityCalculation {
     }
 }
 
-fn accelerations(bodies: &Vec<GravityCalculation>) -> HashMap<Entity, Acceleration> {
+fn accelerations(bodies: &[GravityCalculation]) -> HashMap<Entity, Acceleration> {
     let mut matrix = HashMap::new();
 
     for x in bodies.iter() {
@@ -48,7 +48,7 @@ fn accelerations(bodies: &Vec<GravityCalculation>) -> HashMap<Entity, Accelerati
         matrix.insert(x.entity, acceleration);
     }
 
-    return matrix;
+    matrix
 }
 
 pub struct GravitySystem {}
@@ -73,9 +73,9 @@ impl GravitySystem {
                 entity: id,
             });
         }
-        let accels = accelerations(&gravities);
+        let acceleration_values = accelerations(&gravities);
         for (id, (force_component,)) in &mut world.query::<(&mut ForceComponent,)>() {
-            match accels.get(&id) {
+            match acceleration_values.get(&id) {
                 Some(accel) => {
                     force_component.force = *accel;
                 }

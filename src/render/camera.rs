@@ -1,6 +1,5 @@
 use crate::physics::motion::{Motion, Position};
 use crate::render::render_box::RenderBoxComponent;
-use crate::render::trace::TraceComponent;
 use graphics::{Context, Transformed};
 use hecs::{Entity, World};
 use interpolation;

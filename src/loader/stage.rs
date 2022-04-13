@@ -2,7 +2,7 @@ use crate::core::events::EventHandler;
 use crate::core::gl::SharedGraphics;
 use crate::core::text::SharedGlyphCache;
 use crate::core::world::SharedWorld;
-use crate::loader::loader::{ModelLoader, ToEntityBuilder};
+use crate::loader::model_loader::{ModelLoader, ToEntityBuilder};
 use crate::loader::screen::LoadingScreen;
 use crate::loader::state::LoadingState;
 use piston::input::{Event, RenderEvent, UpdateEvent};
@@ -23,7 +23,7 @@ impl<'a> LoadingStage<'a> {
     ) -> Self {
         let screen = LoadingScreen::new(gl, glyphs.clone());
         let loader = ModelLoader::new(models);
-        let state = LoadingState::new();
+        let state = LoadingState::default();
         LoadingStage {
             world,
             screen,

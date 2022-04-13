@@ -19,6 +19,12 @@ pub struct NameSystem {}
 
 const FONT_SIZE: FontSize = 16;
 
+impl Default for NameSystem {
+    fn default() -> Self {
+        NameSystem::new()
+    }
+}
+
 impl NameSystem {
     pub fn new() -> Self {
         NameSystem {}

@@ -27,11 +27,11 @@ impl<'r> Renderer<'r> {
         Renderer {
             gl,
             camera_system: CameraSystem::new(camera),
-            circle_system: SpriteSystem::new(),
-            name_system: NameSystem::new(),
-            trace_system: RenderTraceSystem::new(),
-            trace_spawn_system: TraceSpawnSystem::new(),
-            background: BackgroundSystem::new(),
+            circle_system: SpriteSystem::default(),
+            name_system: NameSystem::default(),
+            trace_system: RenderTraceSystem::default(),
+            trace_spawn_system: TraceSpawnSystem::default(),
+            background: BackgroundSystem::default(),
             glyphs,
         }
     }

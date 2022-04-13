@@ -21,7 +21,7 @@ impl<'a> SimulationStage<'a> {
         let camera = Camera::fixed(400.0 / 47.0 * 1.0e-6);
 
         let renderer = Renderer::camera(gl, camera, glyphs);
-        let universe = Universe::new();
+        let universe = Universe::default();
         SimulationStage {
             renderer,
             universe,

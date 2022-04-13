@@ -33,8 +33,7 @@ impl GravityCalculation {
         let mass_product = self.mass * rhs.mass;
         let force = G * mass_product / distance_squared;
         let direction = vecmath::vec2_normalized(vecmath::vec2_sub(rhs.position, self.position));
-        let acceleration = vecmath::vec2_scale(direction, force);
-        acceleration
+        vecmath::vec2_scale(direction, force)
     }
 }
 
@@ -53,6 +52,13 @@ fn accelerations(bodies: &Vec<GravityCalculation>) -> HashMap<Entity, Accelerati
 }
 
 pub struct GravitySystem {}
+
+impl Default for GravitySystem {
+    fn default() -> Self {
+        GravitySystem::new()
+    }
+}
+
 impl GravitySystem {
     pub fn new() -> Self {
         GravitySystem {}

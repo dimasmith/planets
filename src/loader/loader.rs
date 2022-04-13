@@ -33,7 +33,7 @@ impl<'a> ModelLoader<'a> {
                 .0;
 
             world
-                .insert_one(heaviest_body, TrackingComponent::new())
+                .insert_one(heaviest_body, TrackingComponent::default())
                 .unwrap();
 
             loading_state.set_progress(1.0);

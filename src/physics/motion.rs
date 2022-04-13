@@ -37,6 +37,12 @@ pub fn distance_between(lhs: &Position, rhs: &Position) -> f64 {
 
 pub struct MotionSystem {}
 
+impl Default for MotionSystem {
+    fn default() -> Self {
+        MotionSystem::new()
+    }
+}
+
 impl MotionSystem {
     pub fn new() -> Self {
         MotionSystem {}

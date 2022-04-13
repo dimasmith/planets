@@ -16,13 +16,20 @@ pub struct Universe {
     force: ForceSystem,
     selected_acceleration: usize,
 }
+
+impl Default for Universe {
+    fn default() -> Self {
+        Universe::new()
+    }
+}
+
 impl Universe {
     pub fn new() -> Self {
         Universe {
             acceleration: ACCELERATIONS[9],
-            motion: MotionSystem::new(),
-            gravity: GravitySystem::new(),
-            force: ForceSystem::new(),
+            motion: MotionSystem::default(),
+            gravity: GravitySystem::default(),
+            force: ForceSystem::default(),
             selected_acceleration: 9,
         }
     }

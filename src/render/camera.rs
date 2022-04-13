@@ -1,5 +1,6 @@
 use crate::physics::motion::{Motion, Position};
 use crate::render::render_box::RenderBoxComponent;
+use crate::render::trace::TraceComponent;
 use graphics::{Context, Transformed};
 use hecs::{Entity, World};
 use interpolation;
@@ -12,6 +13,12 @@ pub enum TrackingMode {
 }
 
 pub struct TrackingComponent {}
+
+impl Default for TrackingComponent {
+    fn default() -> Self {
+        TrackingComponent::new()
+    }
+}
 
 impl TrackingComponent {
     pub fn new() -> Self {

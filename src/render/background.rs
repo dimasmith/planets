@@ -20,6 +20,12 @@ impl BackgroundComponent {
 
 pub struct BackgroundSystem {}
 
+impl Default for BackgroundSystem {
+    fn default() -> Self {
+        BackgroundSystem::new()
+    }
+}
+
 impl BackgroundSystem {
     pub fn new() -> Self {
         BackgroundSystem {}

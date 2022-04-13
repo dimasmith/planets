@@ -50,6 +50,12 @@ impl TraceComponent {
 /// renders and updates object traces
 pub struct RenderTraceSystem {}
 
+impl Default for RenderTraceSystem {
+    fn default() -> Self {
+        RenderTraceSystem::new()
+    }
+}
+
 impl RenderTraceSystem {
     /// create a default trace system
     pub fn new() -> Self {
@@ -80,6 +86,12 @@ impl RenderTraceSystem {
 /// component to spawn traces
 pub struct SpawnTraceSystem {}
 
+impl Default for SpawnTraceSystem {
+    fn default() -> Self {
+        SpawnTraceSystem::new()
+    }
+}
+
 impl SpawnTraceSystem {
     #[allow(dead_code)]
     pub fn new() -> Self {
@@ -90,6 +102,12 @@ impl SpawnTraceSystem {
 const SPAWN_INTERVAL: usize = 16;
 pub struct TraceSpawnSystem {
     ticks_since_spawn: usize,
+}
+
+impl Default for TraceSpawnSystem {
+    fn default() -> Self {
+        TraceSpawnSystem::new()
+    }
 }
 
 impl TraceSpawnSystem {

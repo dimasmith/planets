@@ -1,4 +1,4 @@
-# Planetz
+# Planets
 
 A simple visualizer of planetary motion based on Newtonean mechanics.
 
@@ -9,7 +9,7 @@ Main intent of the project is to get some familiarity with Rust.
 You can describe a simulation using [.ron](https://github.com/ron-rs/ron) files with the parameters.
 See assets directory for examples.
 
-Place compiled planetz binary next to the `assets` directory and start it.
+Place compiled planets binary next to the `assets` directory and start it.
 
 ## Simulation controls
 

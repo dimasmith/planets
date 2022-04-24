@@ -1,5 +1,5 @@
 [package]
-name = "planetz"
+name = "planets"
 version = "0.1.0"
 authors = ["Dmytro Kovalchuk <dimasmith@gmail.com>"]
 edition = "2018"

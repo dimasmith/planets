@@ -1,5 +1,5 @@
 use crate::core::texture::load_texture;
-use crate::loader::loader::ToEntityBuilder;
+use crate::loader::model_loader::ToEntityBuilder;
 use crate::physics::force::ForceComponent;
 use crate::physics::gravity::{Mass, MassComponent};
 use crate::physics::motion::Motion;
@@ -56,11 +56,9 @@ impl Asset for Background {
 
 impl ToEntityBuilder for Background {
     fn to_entity_builder(&self) -> EntityBuilder {
-        let image = String::from(self.image.as_str());
+        let image_path = String::from(self.image.as_str());
         let mut builder = EntityBuilder::new();
-        builder.add(BackgroundComponent::image(load_texture(String::from(
-            image,
-        ))));
+        builder.add(BackgroundComponent::image(load_texture(image_path)));
         builder
     }
 }
@@ -78,8 +76,7 @@ impl Asset for Simulation {
 
 impl Simulation {
     pub fn models(&self) -> Vec<&dyn ToEntityBuilder> {
-        let mut models: Vec<&dyn ToEntityBuilder> = vec![];
-        models.push(&self.background);
+        let mut models: Vec<&dyn ToEntityBuilder> = vec![&self.background];
         self.planets.iter().for_each(|planet| models.push(planet));
         models
     }

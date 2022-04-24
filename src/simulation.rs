@@ -20,8 +20,8 @@ impl<'a> SimulationStage<'a> {
     pub fn new(gl: SharedGraphics, glyphs: SharedGlyphCache<'a>, world: SharedWorld) -> Self {
         let camera = Camera::fixed(400.0 / 47.0 * 1.0e-6);
 
-        let renderer = Renderer::camera(gl.clone(), camera, glyphs.clone());
-        let universe = Universe::new();
+        let renderer = Renderer::camera(gl, camera, glyphs);
+        let universe = Universe::default();
         SimulationStage {
             renderer,
             universe,
@@ -53,8 +53,8 @@ impl<'a> EventHandler for SimulationStage<'a> {
             }
         }
         if let Some(args) = e.button_args() {
-            match args.button {
-                Button::Keyboard(key) => match key {
+            if let Button::Keyboard(key) = args.button {
+                match key {
                     Key::Comma => {
                         universe.slow_down();
                     }
@@ -67,8 +67,7 @@ impl<'a> EventHandler for SimulationStage<'a> {
                         }
                     }
                     _ => {}
-                },
-                _ => {}
+                }
             }
         };
         false

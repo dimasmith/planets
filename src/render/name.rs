@@ -19,6 +19,12 @@ pub struct NameSystem {}
 
 const FONT_SIZE: FontSize = 16;
 
+impl Default for NameSystem {
+    fn default() -> Self {
+        NameSystem::new()
+    }
+}
+
 impl NameSystem {
     pub fn new() -> Self {
         NameSystem {}
@@ -38,8 +44,7 @@ impl NameSystem {
             let bound = render_box.bound();
             let text_length: f64 = glyphs
                 .width(FONT_SIZE, name)
-                .or::<f64>(Ok(self.fallback_name_size(name)))
-                .unwrap();
+                .unwrap_or_else(|_| self.fallback_name_size(name));
             let x = (bound[0] + bound[2] / 2.0) - text_length / 2.0;
             let y = bound[1] + bound[3] + FONT_SIZE as f64;
             let position: RenderingPosition = [x, y];

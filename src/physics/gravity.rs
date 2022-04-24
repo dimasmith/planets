@@ -33,12 +33,11 @@ impl GravityCalculation {
         let mass_product = self.mass * rhs.mass;
         let force = G * mass_product / distance_squared;
         let direction = vecmath::vec2_normalized(vecmath::vec2_sub(rhs.position, self.position));
-        let acceleration = vecmath::vec2_scale(direction, force);
-        acceleration
+        vecmath::vec2_scale(direction, force)
     }
 }
 
-fn accelerations(bodies: &Vec<GravityCalculation>) -> HashMap<Entity, Acceleration> {
+fn accelerations(bodies: &[GravityCalculation]) -> HashMap<Entity, Acceleration> {
     let mut matrix = HashMap::new();
 
     for x in bodies.iter() {
@@ -49,10 +48,17 @@ fn accelerations(bodies: &Vec<GravityCalculation>) -> HashMap<Entity, Accelerati
         matrix.insert(x.entity, acceleration);
     }
 
-    return matrix;
+    matrix
 }
 
 pub struct GravitySystem {}
+
+impl Default for GravitySystem {
+    fn default() -> Self {
+        GravitySystem::new()
+    }
+}
+
 impl GravitySystem {
     pub fn new() -> Self {
         GravitySystem {}
@@ -67,9 +73,9 @@ impl GravitySystem {
                 entity: id,
             });
         }
-        let accels = accelerations(&gravities);
+        let acceleration_values = accelerations(&gravities);
         for (id, (force_component,)) in &mut world.query::<(&mut ForceComponent,)>() {
-            match accels.get(&id) {
+            match acceleration_values.get(&id) {
                 Some(accel) => {
                     force_component.force = *accel;
                 }

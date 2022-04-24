@@ -2,6 +2,12 @@ pub struct LoadingState {
     loaded: f64,
 }
 
+impl Default for LoadingState {
+    fn default() -> Self {
+        LoadingState::new()
+    }
+}
+
 impl LoadingState {
     pub fn new() -> Self {
         LoadingState { loaded: 0.0 }

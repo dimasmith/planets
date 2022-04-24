@@ -36,6 +36,12 @@ impl Sprite {
 
 pub struct SpriteSystem {}
 
+impl Default for SpriteSystem {
+    fn default() -> Self {
+        SpriteSystem::new()
+    }
+}
+
 impl SpriteSystem {
     pub fn new() -> Self {
         SpriteSystem {}

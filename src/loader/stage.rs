@@ -2,7 +2,7 @@ use crate::core::events::EventHandler;
 use crate::core::gl::SharedGraphics;
 use crate::core::text::SharedGlyphCache;
 use crate::core::world::SharedWorld;
-use crate::loader::loader::{ModelLoader, ToEntityBuilder};
+use crate::loader::model_loader::{ModelLoader, ToEntityBuilder};
 use crate::loader::screen::LoadingScreen;
 use crate::loader::state::LoadingState;
 use piston::input::{Event, RenderEvent, UpdateEvent};
@@ -21,9 +21,9 @@ impl<'a> LoadingStage<'a> {
         world: SharedWorld,
         models: Vec<&'a dyn ToEntityBuilder>,
     ) -> Self {
-        let screen = LoadingScreen::new(gl.clone(), glyphs.clone());
+        let screen = LoadingScreen::new(gl, glyphs.clone());
         let loader = ModelLoader::new(models);
-        let state = LoadingState::new();
+        let state = LoadingState::default();
         LoadingStage {
             world,
             screen,
@@ -43,13 +43,13 @@ impl<'a> EventHandler for LoadingStage<'a> {
         if let Some(args) = e.render_args() {
             screen.render(state, args);
         }
-        if let Some(_) = e.update_args() {
+        if e.update_args().is_some() {
             loader.update(state, world);
         }
 
         if self.state.done() {
             return true;
         }
-        return false;
+        false
     }
 }

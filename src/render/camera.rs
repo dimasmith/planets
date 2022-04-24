@@ -13,6 +13,12 @@ pub enum TrackingMode {
 
 pub struct TrackingComponent {}
 
+impl Default for TrackingComponent {
+    fn default() -> Self {
+        TrackingComponent::new()
+    }
+}
+
 impl TrackingComponent {
     pub fn new() -> Self {
         TrackingComponent {}

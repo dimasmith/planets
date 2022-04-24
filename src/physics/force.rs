@@ -17,6 +17,12 @@ impl ForceComponent {
 
 pub struct ForceSystem {}
 
+impl Default for ForceSystem {
+    fn default() -> Self {
+        ForceSystem::new()
+    }
+}
+
 impl ForceSystem {
     pub fn new() -> Self {
         ForceSystem {}

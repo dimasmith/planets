@@ -1,3 +1,4 @@
+use clap::{arg, Arg, ArgMatches, Command};
 use opengl_graphics::OpenGL;
 use piston::event_loop::{EventSettings, Events};
 use piston::window::WindowSettings;
@@ -18,6 +19,33 @@ mod render;
 mod simulation;
 
 fn main() {
-    let resolution = ScreenResolution::default();
+    let cli_matches = Command::new("planets")
+        .version("0.2.0")
+        .arg(
+            arg!(-r --resolution <RESOLUTION>)
+                .required(false)
+                .default_value("1920x1080")
+                .help("set simulation graphics resolution"),
+        )
+        .arg(
+            arg!(-w - -windowed)
+                .required(false)
+                .help("run in windowed mode"),
+        )
+        .get_matches();
+
+    let resolution = configure_resolution(cli_matches);
+
     simulator::run("simulation", "assets", resolution);
+}
+
+fn configure_resolution(cli_matches: ArgMatches) -> ScreenResolution {
+    let mut resolution = ScreenResolution::default();
+    if cli_matches.is_present("windowed") {
+        resolution.set_fullscreen(false);
+    }
+    if let Some(res_str) = cli_matches.value_of("resolution") {
+        resolution.resolution_from_str(res_str);
+    }
+    resolution
 }

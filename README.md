@@ -19,6 +19,23 @@ Place compiled planets binary next to the `assets` directory and start it.
 * `mouse wheel` - zooms in/out;
 * `esc` - exit simulation;
 
+## Cli parameters
+
+See cli help for details
+```shell
+planets --help
+```
+
+### Control resolution
+
+The simulation runs in the fullscreen mode by default. 
+You can change it to windowed mode via the `--windowed` flag.
+
+You can control the resolution using the `--resolution=800x600` flag.
+
+Note that when running in fullscreen mode on some systems the resolution might be igored.
+The OS might start simulation in a native screen resolution.
+
 ## Internals
 
 The project uses [piston](https://www.piston.rs/) engine for rendering.
@@ -26,7 +43,6 @@ World is built with [hecs](https://github.com/Ralith/hecs) - nice implementation
 
 ## Issues that will immediately kick you
 
-* The resolution is hardcoded to 1920x1080 in fullscreen mode.
 * Paths to assets and file names inside are hardcoded.
 
 ## Good words for

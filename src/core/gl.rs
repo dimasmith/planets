@@ -50,6 +50,17 @@ impl ScreenResolution {
     }
 }
 
+impl TryFrom<&str> for ScreenResolution {
+    type Error = ();
+
+    fn try_from(value: &str) -> Result<Self, Self::Error> {
+        let mut resolution = ScreenResolution::default();
+        resolution.resolution_from_str(value);
+        resolution.fullscreen = false;
+        Ok(resolution)
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

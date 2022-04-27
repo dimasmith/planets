@@ -15,6 +15,7 @@ hecs = "^0.2.12"
 rusttype = "^0.9.1"
 serde = "1.0"
 image = "^0"
+clap = "^3"
 
 [dependencies.vecmath]
 version = "^1.0.0"

@@ -21,6 +21,7 @@ mod simulation;
 fn main() {
     let cli_matches = Command::new("planets")
         .version("0.2.0")
+        .about("Run gravitational simulations of multiple bodies. Uses Newtonian mechanics")
         .arg(
             arg!(-r --resolution <RESOLUTION>)
                 .required(false)

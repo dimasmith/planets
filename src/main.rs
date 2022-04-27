@@ -18,5 +18,6 @@ mod render;
 mod simulation;
 
 fn main() {
-    simulator::run("simulation", "assets", ScreenResolution::default());
+    let resolution = ScreenResolution::default();
+    simulator::run("simulation", "assets", resolution);
 }

@@ -1,3 +1,4 @@
+use crate::gl::ScreenResolution;
 use crate::{
     gl, text, world, EventLoop, EventSettings, Events, LoadingStage, OpenGL, Simulation,
     SimulationStage, WindowSettings,
@@ -5,16 +6,16 @@ use crate::{
 use assets_manager::AssetCache;
 use glutin_window::GlutinWindow as Window;
 
-pub fn run(simulation_file: &str, assets_path: &str) {
+pub fn run(simulation_file: &str, assets_path: &str, resolution: ScreenResolution) {
     let assets_cache = AssetCache::new(assets_path).unwrap();
     let asset_lock = assets_cache.load::<Simulation>(simulation_file).unwrap();
     let simulation = asset_lock.read();
 
     let opengl = OpenGL::V4_5;
-    let mut window: Window = WindowSettings::new("n-Body Simulation", [1920, 1080])
+    let mut window: Window = WindowSettings::new("n-Body Simulation", resolution.resolution())
         .graphics_api(opengl)
         .vsync(true)
-        .fullscreen(true)
+        .fullscreen(resolution.fullscreen())
         .exit_on_esc(true)
         .build()
         .unwrap();

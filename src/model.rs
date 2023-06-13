@@ -40,7 +40,7 @@ impl ToEntityBuilder for Planet {
 }
 
 impl Asset for Planet {
-    const EXT: &'static str = "ron";
+    const EXTENSION: &'static str = "ron";
     type Loader = loader::RonLoader;
 }
 
@@ -50,7 +50,7 @@ pub struct Background {
 }
 
 impl Asset for Background {
-    const EXT: &'static str = "ron";
+    const EXTENSION: &'static str = "ron";
     type Loader = loader::RonLoader;
 }
 
@@ -70,7 +70,7 @@ pub struct Simulation {
 }
 
 impl Asset for Simulation {
-    const EXT: &'static str = "ron";
+    const EXTENSION: &'static str = "ron";
     type Loader = loader::RonLoader;
 }
 

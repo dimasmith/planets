@@ -75,11 +75,8 @@ impl GravitySystem {
         }
         let acceleration_values = accelerations(&gravities);
         for (id, (force_component,)) in &mut world.query::<(&mut ForceComponent,)>() {
-            match acceleration_values.get(&id) {
-                Some(accel) => {
-                    force_component.force = *accel;
-                }
-                None => {}
+            if let Some(accel) = acceleration_values.get(&id) {
+                force_component.force = *accel;
             }
         }
     }

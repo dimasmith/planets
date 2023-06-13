@@ -6,6 +6,7 @@ use opengl_graphics::{GlGraphics, Texture};
 use crate::render::render_box::RenderBoxComponent;
 
 pub enum SpriteKind {
+    #[allow(dead_code)]
     Circle(Ellipse, Color),
     Image(Image, Texture),
 }
@@ -16,6 +17,7 @@ pub struct Sprite {
 
 impl Sprite {
     /// create colored circle sprite
+    #[allow(dead_code)]
     pub fn circle(color: Color) -> Self {
         let circle = Ellipse::new(color);
         Sprite {

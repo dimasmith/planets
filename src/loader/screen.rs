@@ -34,7 +34,7 @@ fn draw_text(
     context: Context,
     gl: &mut GlGraphics,
 ) {
-    let text_length: f64 = glyphs.width(32, text).or::<f64>(Ok(400.0)).unwrap();
+    let text_length: f64 = glyphs.width(32, text).unwrap_or(400.0);
     let ctx = context.trans(
         args.window_size[0] / 2.0 - text_length / 2.0,
         args.window_size[1] / 2.0,

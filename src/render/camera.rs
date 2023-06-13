@@ -150,7 +150,7 @@ impl Zoom {
         self.steps_left -= 1;
         let start_zoom = self.start_zoom;
         let target_zoom = self.target_zoom;
-        let ip = ((self.steps - self.steps_left) as f64 / self.steps as f64) as f64;
+        let ip = (self.steps - self.steps_left) as f64 / self.steps as f64;
         let zoom = interpolation::lerp::<f64>(&start_zoom, &target_zoom, &ip);
         self.zoom = zoom;
     }

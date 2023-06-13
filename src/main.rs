@@ -1,4 +1,4 @@
-use clap::{arg, Arg, ArgMatches, Command};
+use clap::{arg, ArgMatches, Command};
 use opengl_graphics::OpenGL;
 use piston::event_loop::{EventSettings, Events};
 use piston::window::WindowSettings;

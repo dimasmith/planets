@@ -42,10 +42,11 @@ fn main() {
 
 fn configure_resolution(cli_matches: ArgMatches) -> ScreenResolution {
     let mut resolution = ScreenResolution::default();
-    if cli_matches.is_present("windowed") {
+    if cli_matches.get_flag("windowed") {
         resolution.set_fullscreen(false);
     }
-    if let Some(res_str) = cli_matches.value_of("resolution") {
+    let resolution_arg: Option<&String> = cli_matches.get_one("resolution");
+    if let Some(res_str) = resolution_arg {
         resolution.resolution_from_str(res_str);
     }
     resolution

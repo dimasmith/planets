@@ -16,6 +16,7 @@ rusttype = "^0.9.1"
 serde = "1.0"
 image = "^0"
 clap = "4.0.0"
+winit = "0.28.6"
 
 [dependencies.vecmath]
 version = "^1.0.0"

@@ -5,6 +5,7 @@ use crate::{
 };
 use assets_manager::AssetCache;
 use glutin_window::GlutinWindow as Window;
+use winit::window::Fullscreen;
 
 pub fn run(simulation_file: &str, assets_path: &str, resolution: ScreenResolution) {
     let assets_cache = AssetCache::new(assets_path).unwrap();
@@ -15,10 +16,15 @@ pub fn run(simulation_file: &str, assets_path: &str, resolution: ScreenResolutio
     let mut window: Window = WindowSettings::new("n-Body Simulation", resolution.resolution())
         .graphics_api(opengl)
         .vsync(true)
-        // .fullscreen(resolution.fullscreen())
         .exit_on_esc(true)
         .build()
         .unwrap();
+
+    // workraound for the borderless fullscreen bug in pistoncore-glutin_window
+    // see details here: https://github.com/PistonDevelopers/glutin_window/issues/210
+    if resolution.fullscreen() {
+        window.window.set_fullscreen(Some(Fullscreen::Borderless(window.window.current_monitor())));
+    }
 
     let gl = gl::create(opengl);
     let glyphs = text::create();

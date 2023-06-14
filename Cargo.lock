@@ -1296,6 +1296,7 @@ dependencies = [
  "rusttype",
  "serde",
  "vecmath",
+ "winit",
 ]
 
 [[package]]

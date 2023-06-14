@@ -15,7 +15,7 @@ pub fn run(simulation_file: &str, assets_path: &str, resolution: ScreenResolutio
     let mut window: Window = WindowSettings::new("n-Body Simulation", resolution.resolution())
         .graphics_api(opengl)
         .vsync(true)
-        .fullscreen(resolution.fullscreen())
+        // .fullscreen(resolution.fullscreen())
         .exit_on_esc(true)
         .build()
         .unwrap();
